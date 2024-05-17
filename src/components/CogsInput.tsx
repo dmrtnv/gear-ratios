@@ -1,5 +1,3 @@
-'use client';
-
 import { parseCogs } from '@/lib/parseCogs';
 import { cn } from '@/lib/utils';
 import { X } from 'lucide-react';

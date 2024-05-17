@@ -1,5 +1,3 @@
-'use client';
-
 import { Drivetrain } from '@/types/Drivetrain';
 import { Chart as ChartJS, CategoryScale, Colors, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { useEffect, useState } from 'react';

@@ -1,5 +1,3 @@
-'use client';
-
 import { cn } from '@/lib/utils';
 import Crank from '/Crank.svg';
 import React, { useEffect, useRef, useState } from 'react';

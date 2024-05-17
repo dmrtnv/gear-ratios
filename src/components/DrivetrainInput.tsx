@@ -1,5 +1,3 @@
-'use client';
-
 import { Drivetrain } from '@/types/Drivetrain';
 import { Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
