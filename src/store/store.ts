@@ -3,7 +3,7 @@ import { drivetrainReducer } from './features/drivetrain/drivetrainSlice';
 
 export const store = configureStore({
   reducer: {
-    drivetrainReducer,
+    drivetrain: drivetrainReducer,
   },
 });
 
