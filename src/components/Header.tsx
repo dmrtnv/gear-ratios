@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import Crank from '@/public/Crank.svg';
+import Crank from '/Crank.svg';
 import React, { useEffect, useRef, useState } from 'react';
 
 function Header() {
