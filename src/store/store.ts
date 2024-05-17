@@ -1,7 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { drivetrainReducer } from './features/drivetrain/drivetrainSlice';
 
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    drivetrainReducer,
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
