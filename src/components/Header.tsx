@@ -1,6 +1,9 @@
 import { cn } from '@/lib/utils';
 import Crank from '/Crank.svg';
 import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { drivetrainSlice } from '@/store/features/drivetrain/drivetrainSlice';
 
 function Header() {
   const leftElementRef = useRef<HTMLDivElement>(null);
@@ -8,6 +11,8 @@ function Header() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [shiftValue, setShiftValue] = useState<number | null>(null);
   const [initialRender, setInitialRender] = useState(true);
+  const dispatch = useDispatch();
+  const { reset } = drivetrainSlice.actions;
 
   useEffect(() => {
     if (containerRef.current) setTimeout(() => setInitialRender(false), 1);
@@ -34,7 +39,13 @@ function Header() {
   }, []);
 
   return (
-    <a href={'/'} className={cn('mt-4 w-full', initialRender && 'opacity-0')}>
+    <Link
+      to={'/'}
+      onClick={() => {
+        dispatch(reset());
+      }}
+      className={cn('mt-4 w-full', initialRender && 'opacity-0')}
+    >
       <div
         ref={containerRef}
         style={{ '--shift-width': `${shiftValue}px` } as React.CSSProperties}
@@ -61,7 +72,7 @@ function Header() {
           </div>
         </div>
       </div>
-    </a>
+    </Link>
   );
 }
 

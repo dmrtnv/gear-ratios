@@ -1,32 +1,72 @@
-import { useEffect } from 'react';
-import './App.css';
-import { useAppDispatch, useAppSelector } from './hooks/redux';
-import { drivetrainSlice } from './store/features/drivetrain/drivetrainSlice';
-import Header from './components/Header';
-import DrivetrainInput from './components/DrivetrainInput';
-import { Button } from './components/ui/button';
 import { Plus } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import Chart from './components/Chart';
+import DrivetrainInput from './components/DrivetrainInput';
+import Header from './components/Header';
+import { Button } from './components/ui/button';
+import { useAppDispatch, useAppSelector } from './hooks/redux';
+import { parseDrivetrain } from './lib/parseDrivetrain';
+import { drivetrainSlice } from './store/features/drivetrain/drivetrainSlice';
 
 function App() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const drivetrains = useAppSelector((state) => state.drivetrain);
-  const { addNew, set } = drivetrainSlice.actions;
+  const { addNew, set, reset } = drivetrainSlice.actions;
   const dispatch = useAppDispatch();
 
+  const [initialRender, setInitiaRender] = useState(true);
+
   useEffect(() => {
-    console.log('drivetrains', drivetrains);
+    const drivetrainStrings = searchParams.getAll('d');
+
+    if (!drivetrainStrings.length) {
+      dispatch(reset());
+      return;
+    }
+
+    const newDrivetrains: { cassette: number[]; crankset: number[] }[] = [];
+
+    drivetrainStrings.forEach((d) => {
+      const parsedDrivetrain = parseDrivetrain(d);
+
+      if (!parsedDrivetrain.success) return;
+
+      newDrivetrains.push(parsedDrivetrain.data);
+    });
+
+    if (newDrivetrains.length) {
+      dispatch(set(newDrivetrains));
+    } else {
+      dispatch(reset());
+    }
+
+    setInitiaRender(false);
+  }, []);
+
+  useEffect(() => {
+    if (initialRender) return;
+
+    // console.log('drivetrains', drivetrains);
 
     if (!drivetrains.length) {
-      dispatch(
-        set([
-          {
-            cassette: [],
-            crankset: [],
-          },
-        ]),
-      );
+      dispatch(reset());
     }
-  }, [drivetrains, dispatch, set]);
+  }, [drivetrains, dispatch, reset, initialRender]);
+
+  useEffect(() => {
+    const searchParamsString: [string, string][] = [];
+
+    drivetrains.forEach((d) => {
+      if (d.cassette.length && d.crankset.length) {
+        // searchParamsString += `d${i + 1}_crankset=${d.crankset.join(',')}&d${i + 1}_cassette=${d.cassette.join(',')}&`;
+        searchParamsString.push(['d', `${d.crankset.join('-')}x${d.cassette.join('-')}`]);
+      }
+    });
+
+    setSearchParams(searchParamsString);
+  }, [drivetrains, setSearchParams]);
 
   return (
     <div className='flex flex-col items-center gap-8'>
