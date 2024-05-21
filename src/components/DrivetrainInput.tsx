@@ -30,7 +30,7 @@ function DrivetrainInput({ drivetrain }: { drivetrain: Drivetrain }) {
   }, [inputDrivetrain]);
 
   return (
-    <div className='flex w-full flex-1 flex-col justify-between gap-6 border-2 p-4'>
+    <div className='flex w-full flex-col justify-between gap-6 border-2 p-4 md:w-fit md:flex-initial'>
       <div className='space-y-6'>
         <h2 className='min-w-fit text-2xl font-bold'>{drivetrain.name}</h2>
 

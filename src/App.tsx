@@ -69,20 +69,22 @@ function App() {
   }, [drivetrains, setSearchParams]);
 
   return (
-    <div className='flex flex-col items-center gap-8'>
+    <div className='flex w-full flex-col items-center gap-8 p-2'>
       <Header />
 
-      <div className='flex items-center justify-center gap-2'>
-        {drivetrains.length < 5 && <div className='h-14 w-14 shrink'></div>}
-        <div className='flex flex-wrap gap-2'>
+      <div className='flex w-full flex-col items-center gap-2 md:w-fit md:flex-row md:flex-wrap md:items-stretch md:justify-center'>
+        {/* {drivetrains.length < 5 && <div className='hidden h-14 w-14 flex-shrink border sm:flex'></div>} */}
+        <>
           {drivetrains.map((drivetrain) => (
             <DrivetrainInput key={drivetrain.id} drivetrain={drivetrain} />
           ))}
-        </div>
+        </>
         {drivetrains.length < 5 && (
-          <Button size={'icon-lg'} variant={'ghost'} onClick={() => dispatch(addNew())}>
-            <Plus strokeWidth={1.7} size={32} />
-          </Button>
+          <div className='flex items-center justify-center'>
+            <Button size={'icon-lg'} variant={'ghost'} onClick={() => dispatch(addNew())}>
+              <Plus strokeWidth={1.7} size={32} />
+            </Button>
+          </div>
         )}
       </div>
 

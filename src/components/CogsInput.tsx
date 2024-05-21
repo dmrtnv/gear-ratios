@@ -103,33 +103,29 @@ function CogsInput({ globalCogs, setGlobalCogs, maxLength = 15, orderBy = 'asc' 
   };
 
   return (
-    <div className='flex items-center justify-between gap-1'>
-      <div onFocus={handleFocus} onBlur={handleBlur} className='flex flex-wrap items-center justify-start gap-1'>
-        {cogs.map((cog, index) => (
-          <InputSlot
-            key={index}
-            cog={cog}
-            inputRefs={inputRefs}
-            index={index}
-            maxLength={maxLength}
-            numberOfFilledCogs={numberOfFilledCogs}
-            setCog={(newCog: string) => {
-              setCogs((prevCogs) => prevCogs.map((c, i) => (i === index ? newCog : c)));
-            }}
-            insertCogs={(newCogs: string[]) => {
-              insertCogsAt(newCogs, index);
-            }}
-          />
-        ))}
-      </div>
+    <div onFocus={handleFocus} onBlur={handleBlur} className='flex flex-wrap gap-1 sm:min-w-[348px]'>
+      {cogs.map((cog, index) => (
+        <InputSlot
+          key={index}
+          cog={cog}
+          inputRefs={inputRefs}
+          index={index}
+          maxLength={maxLength}
+          numberOfFilledCogs={numberOfFilledCogs}
+          setCog={(newCog: string) => {
+            setCogs((prevCogs) => prevCogs.map((c, i) => (i === index ? newCog : c)));
+          }}
+          insertCogs={(newCogs: string[]) => {
+            insertCogsAt(newCogs, index);
+          }}
+        />
+      ))}
 
-      <div className='flex items-center justify-center gap-1'>
-        {!!numberOfFilledCogs && (
-          <Button onClick={() => setCogs(Array(maxLength).fill(''))} size={'icon'} variant={'ghost'}>
-            <X size={26} strokeWidth={1.7} />
-          </Button>
-        )}
-      </div>
+      {!!numberOfFilledCogs && (
+        <Button onClick={() => setCogs(Array(maxLength).fill(''))} size={'icon'} variant={'ghost'}>
+          <X size={26} strokeWidth={1.7} />
+        </Button>
+      )}
     </div>
   );
 }
