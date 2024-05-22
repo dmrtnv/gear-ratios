@@ -42,7 +42,7 @@ export const drivetrainSlice = createSlice({
         name: `Drivetrain ${state.length + 1}`,
         ridingStyle: 'road',
         wheelSize: '28',
-        color: COLORS[0],
+        color: COLORS[state.length],
         cassette: [],
         crankset: [],
       });
