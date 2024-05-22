@@ -8,6 +8,7 @@ import { Button } from './components/ui/button';
 import { useAppDispatch, useAppSelector } from './hooks/redux';
 import { parseDrivetrain } from './lib/parseDrivetrain';
 import { drivetrainSlice } from './store/features/drivetrain/drivetrainSlice';
+import { Drivetrain } from './types/Drivetrain';
 
 function App() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -26,7 +27,7 @@ function App() {
       return;
     }
 
-    const newDrivetrains: { cassette: number[]; crankset: number[] }[] = [];
+    const newDrivetrains: Omit<Drivetrain, 'id' | 'name' | 'color'>[] = [];
 
     drivetrainStrings.forEach((d) => {
       const parsedDrivetrain = parseDrivetrain(d);
@@ -63,7 +64,10 @@ function App() {
     drivetrains.forEach((d) => {
       if (d.cassette.length && d.crankset.length) {
         // searchParamsString += `d${i + 1}_crankset=${d.crankset.join(',')}&d${i + 1}_cassette=${d.cassette.join(',')}&`;
-        searchParamsString.push(['d', `${d.crankset.join('-')}x${d.cassette.join('-')}`]);
+        searchParamsString.push([
+          'd',
+          `${d.ridingStyle}x${d.wheelSize}x${d.crankset.join('-')}x${d.cassette.join('-')}`,
+        ]);
       }
     });
 
