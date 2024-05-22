@@ -5,8 +5,10 @@ import { Bar } from 'react-chartjs-2';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, Colors);
 
-function Chart({ drivetrains }: { drivetrains: Drivetrain[] }) {
-  const [datasets, setDatasets] = useState<{ label: string; data: { key: string; value: number }[] }[]>([]);
+function Chart({ drivetrains, vertical = false }: { drivetrains: Drivetrain[]; vertical?: boolean }) {
+  const [datasets, setDatasets] = useState<
+    { label: string; data: { key: string; value: number }[]; borderColor: string; backgroundColor: string }[]
+  >([]);
 
   useEffect(() => {
     const getGearRatios = ({
@@ -77,7 +79,12 @@ function Chart({ drivetrains }: { drivetrains: Drivetrain[] }) {
     const newData: typeof datasets = [];
 
     drivetrains.forEach((d) => {
-      newData.push({ label: d.name, data: getGearRatios({ cassette: d.cassette, crankset: d.crankset }) });
+      newData.push({
+        label: d.name,
+        backgroundColor: d.color.hexValue + 'AA',
+        borderColor: d.color.hexValue,
+        data: getGearRatios({ cassette: d.cassette, crankset: d.crankset }),
+      });
     });
 
     setDatasets(newData);
@@ -93,8 +100,9 @@ function Chart({ drivetrains }: { drivetrains: Drivetrain[] }) {
         datasets: datasets.map((d) => ({ ...d })),
       }}
       options={{
-        plugins: {},
-        parsing: { xAxisKey: 'key', yAxisKey: 'value' },
+        aspectRatio: vertical ? 1 : 2,
+        indexAxis: vertical ? 'y' : 'x',
+        parsing: vertical ? { xAxisKey: 'value', yAxisKey: 'key' } : { xAxisKey: 'key', yAxisKey: 'value' },
         scales: {
           x: {
             title: {
