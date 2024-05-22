@@ -34,15 +34,9 @@ function DrivetrainInput({ drivetrain }: { drivetrain: Drivetrain }) {
       <div className='space-y-6'>
         <h2 className='min-w-fit text-2xl font-bold'>{drivetrain.name}</h2>
 
-        <RidingStyleSelect
-          ridingStyle={drivetrain.ridingStyle}
-          setRidingStyle={(newRidingStyle) => dispatch(update({ ...drivetrain, ridingStyle: newRidingStyle }))}
-        />
+        <RidingStyleSelect drivetrain={drivetrain} />
 
-        <WheelSizeSelect
-          wheelSize={drivetrain.wheelSize}
-          setWheelSize={(newWheelSize) => dispatch(update({ ...drivetrain, wheelSize: newWheelSize }))}
-        />
+        <WheelSizeSelect drivetrain={drivetrain} />
 
         <ColorSelect
           color={drivetrain.color}

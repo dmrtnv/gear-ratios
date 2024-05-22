@@ -3,17 +3,31 @@ import { Drivetrain } from '@/types/Drivetrain';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
 
-const initialState: Drivetrain[] = [];
+type DrivetrainSlice = {
+  drivetrains: Drivetrain[];
+  options: {
+    linkRidingStyle: boolean;
+    linkWheelSize: boolean;
+  };
+};
+
+const initialState: DrivetrainSlice = {
+  drivetrains: [],
+  options: {
+    linkRidingStyle: false,
+    linkWheelSize: false,
+  },
+};
 
 export const drivetrainSlice = createSlice({
   name: 'drivetrain',
   initialState,
   reducers: {
-    set(state, action: PayloadAction<{ crankset: number[]; cassette: number[] }[]>) {
-      state.splice(0, state.length);
+    set({ drivetrains }, action: PayloadAction<{ crankset: number[]; cassette: number[] }[]>) {
+      drivetrains.splice(0, drivetrains.length);
 
       action.payload.forEach((d, i) => {
-        state.push({
+        drivetrains.push({
           ...d,
           id: uuidv4(),
           name: 'Drivetrain ' + (i + 1),
@@ -23,10 +37,10 @@ export const drivetrainSlice = createSlice({
         });
       });
     },
-    reset(state) {
-      state.splice(0, state.length);
+    reset({ drivetrains }) {
+      drivetrains.splice(0, drivetrains.length);
 
-      state.push({
+      drivetrains.push({
         id: uuidv4(),
         name: 'Drivetrain 1',
         ridingStyle: 'road',
@@ -36,34 +50,78 @@ export const drivetrainSlice = createSlice({
         cassette: [],
       });
     },
-    addNew(state) {
-      state.push({
+    addNew({ drivetrains }) {
+      drivetrains.push({
         id: uuidv4(),
-        name: `Drivetrain ${state.length + 1}`,
+        name: `Drivetrain ${drivetrains.length + 1}`,
         ridingStyle: 'road',
         wheelSize: '28',
-        color: COLORS[state.length],
+        color: COLORS[drivetrains.length],
         cassette: [],
         crankset: [],
       });
     },
-    remove(state, action: PayloadAction<string>) {
-      const index = state.findIndex((d) => d.id === action.payload);
+    remove({ drivetrains }, action: PayloadAction<string>) {
+      const index = drivetrains.findIndex((d) => d.id === action.payload);
       if (index !== -1) {
-        state.splice(index, 1);
+        drivetrains.splice(index, 1);
 
-        state.forEach((d, i) => {
+        drivetrains.forEach((d, i) => {
           d.name = `Drivetrain ${i + 1}`;
         });
       }
     },
-    update(state, action: PayloadAction<Drivetrain>) {
+    update({ drivetrains }, action: PayloadAction<Drivetrain>) {
       const { id } = action.payload;
-      const existingDrivetrain = state.find((d) => d.id === id);
+      const existingDrivetrain = drivetrains.find((d) => d.id === id);
 
       if (existingDrivetrain) {
         Object.assign(existingDrivetrain, action.payload);
       }
+    },
+    updateRidingStyle(state, action: PayloadAction<Drivetrain>) {
+      const linkRidingStyle = state.options.linkRidingStyle;
+
+      state.drivetrains.forEach((d) => {
+        if (linkRidingStyle || d.id === action.payload.id) {
+          d.ridingStyle = action.payload.ridingStyle;
+        }
+      });
+    },
+    updateWheelSize(state, action: PayloadAction<Drivetrain>) {
+      const linkWheelSize = state.options.linkWheelSize;
+
+      state.drivetrains.forEach((d) => {
+        if (linkWheelSize || d.id === action.payload.id) {
+          d.wheelSize = action.payload.wheelSize;
+        }
+      });
+    },
+    toggleLinkRidingStyle({ drivetrains, options }, action: PayloadAction<Drivetrain['id']>) {
+      options.linkRidingStyle = !options.linkRidingStyle;
+
+      if (!options.linkRidingStyle) return;
+
+      const ridingStyle = drivetrains.find((d) => d.id === action.payload)?.ridingStyle;
+
+      if (!ridingStyle) return;
+
+      drivetrains.forEach((d) => {
+        d.ridingStyle = ridingStyle;
+      });
+    },
+    toggleLinkWheelSize({ drivetrains, options }, action: PayloadAction<Drivetrain['id']>) {
+      options.linkWheelSize = !options.linkWheelSize;
+
+      if (!options.linkWheelSize) return;
+
+      const wheelSize = drivetrains.find((d) => d.id === action.payload)?.wheelSize;
+
+      if (!wheelSize) return;
+
+      drivetrains.forEach((d) => {
+        d.wheelSize = wheelSize;
+      });
     },
   },
 });

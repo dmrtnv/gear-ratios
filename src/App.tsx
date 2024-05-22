@@ -12,7 +12,7 @@ import { drivetrainSlice } from './store/features/drivetrain/drivetrainSlice';
 function App() {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const drivetrains = useAppSelector((state) => state.drivetrain);
+  const drivetrains = useAppSelector((state) => state.drivetrain.drivetrains);
   const { addNew, set, reset } = drivetrainSlice.actions;
   const dispatch = useAppDispatch();
 
@@ -46,9 +46,9 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (initialRender) return;
-
     // console.log('drivetrains', drivetrains);
+
+    if (initialRender) return;
 
     if (!drivetrains.length) {
       dispatch(reset());
@@ -88,7 +88,12 @@ function App() {
         )}
       </div>
 
-      <Chart drivetrains={drivetrains.filter((d) => d.cassette.length && d.crankset.length)} />
+      <div className='hidden w-full md:block'>
+        <Chart drivetrains={drivetrains.filter((d) => d.cassette.length && d.crankset.length)} />
+      </div>
+      <div className='block w-full md:hidden'>
+        <Chart vertical drivetrains={drivetrains.filter((d) => d.cassette.length && d.crankset.length)} />
+      </div>
     </div>
   );
 }
