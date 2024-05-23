@@ -179,7 +179,7 @@ function InputSlot({ index, inputRefs, cog, numberOfFilledCogs, maxLength, setCo
 
         insertCogs(parsedCogs.data);
       }}
-      onChange={(e) => {}}
+      onChange={() => {}}
       onKeyDown={(e) => {
         // console.log(e.key);
 
