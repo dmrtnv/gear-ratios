@@ -103,7 +103,7 @@ function CogsInput({ globalCogs, setGlobalCogs, maxLength = 15, orderBy = 'asc' 
   };
 
   return (
-    <div onFocus={handleFocus} onBlur={handleBlur} className='flex flex-wrap gap-1 sm:min-w-[348px]'>
+    <div onFocus={handleFocus} onBlur={handleBlur} className='flex flex-1 flex-wrap gap-1 sm:min-w-[348px]'>
       {cogs.map((cog, index) => (
         <InputSlot
           key={index}
