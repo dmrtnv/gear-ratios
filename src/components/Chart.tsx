@@ -1,5 +1,7 @@
+import { getGearRatios } from '@/lib/describeDrivetrain';
 import { Drivetrain } from '@/types/Drivetrain';
 import { Chart as ChartJS, CategoryScale, Colors, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+
 import { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 
@@ -7,83 +9,25 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,
 
 function Chart({ drivetrains, vertical = false }: { drivetrains: Drivetrain[]; vertical?: boolean }) {
   const [datasets, setDatasets] = useState<
-    { label: string; data: { key: string; value: number }[]; borderColor: string; backgroundColor: string }[]
+    {
+      grouped: boolean;
+      label: string;
+      data: { key: string; value: number }[];
+      borderColor: string;
+      backgroundColor: string;
+    }[]
   >([]);
 
   useEffect(() => {
-    const getGearRatios = ({
-      cassette,
-      crankset,
-      wheelDiameter = 28,
-    }: {
-      cassette: number[];
-      crankset: number[];
-      wheelDiameter?: number;
-    }) => {
-      // Gear inches =
-      // Diameter of drive wheel in inches × (number of teeth in front chainring / number of teeth in rear sprocket).
-      // Normally rounded to nearest whole number.
-
-      const gearRatios: { key: string; value: number }[] = [];
-      let startLeft = 0;
-
-      for (let i = 0; i < crankset.length - 1 || i === 0; i++) {
-        for (let jl = startLeft, jr = cassette.length - 1; jl < cassette.length && jr >= 0; jl++, jr--) {
-          if (crankset.length === 1) {
-            gearRatios.push({
-              key: `${crankset[0]}-${cassette[jl]}`,
-              value: Math.round(wheelDiameter * (crankset[0] / cassette[jl])),
-            });
-            continue;
-          }
-
-          const left = {
-            key: `${crankset[i]}-${cassette[jl]}`,
-            value: Math.round(wheelDiameter * (crankset[i] / cassette[jl])),
-          };
-          const right = {
-            key: `${crankset[i + 1]}-${cassette[jr]}`,
-            value: Math.round(wheelDiameter * (crankset[i + 1] / cassette[jr])),
-          };
-
-          if (crankset.length === 2) {
-            if (left.value < right.value) {
-              gearRatios.push(left, right);
-            }
-            if (left.value === right.value) {
-              gearRatios.push(right);
-            }
-          }
-
-          if (crankset.length === 3) {
-            if (left.value < right.value) {
-              if (i === 0) {
-                gearRatios.push(left);
-                startLeft = jr;
-              } else {
-                gearRatios.push(left, right);
-              }
-            }
-            if (left.value === right.value) {
-              gearRatios.push(right);
-            }
-          }
-        }
-      }
-
-      // console.log(gearRatios);
-
-      return gearRatios.toSorted((a, b) => a.value - b.value);
-    };
-
     const newData: typeof datasets = [];
 
-    drivetrains.forEach((d) => {
+    drivetrains.forEach((d, i) => {
       newData.push({
+        grouped: false,
         label: d.name,
         backgroundColor: d.color.hexValue + 'AA',
         borderColor: d.color.hexValue,
-        data: getGearRatios({ cassette: d.cassette, crankset: d.crankset }),
+        data: getGearRatios(d).map((g) => ({ ...g, key: `d${i + 1} ` + g.key })),
       });
     });
 
