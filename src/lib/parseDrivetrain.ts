@@ -15,7 +15,7 @@ export function parseDrivetrain(
   );
 
   if (drivetrainRegex.test(drivetrainString)) {
-    console.log(drivetrainString);
+    // console.log(drivetrainString);
 
     const [ridingStyleString, wheelSizeString, cranksetString, cassetteString] = drivetrainString.split('x');
 
