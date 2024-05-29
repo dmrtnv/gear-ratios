@@ -20,6 +20,8 @@ function App() {
   const [initialRender, setInitiaRender] = useState(true);
 
   useEffect(() => {
+    setInitiaRender(false);
+
     const drivetrainStrings = searchParams.getAll('d');
 
     if (!drivetrainStrings.length) {
@@ -43,8 +45,6 @@ function App() {
       dispatch(reset());
     }
 
-    setInitiaRender(false);
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -63,7 +63,6 @@ function App() {
 
     drivetrains.forEach((d) => {
       if (d.cassette.length && d.crankset.length) {
-        // searchParamsString += `d${i + 1}_crankset=${d.crankset.join(',')}&d${i + 1}_cassette=${d.cassette.join(',')}&`;
         searchParamsString.push([
           'd',
           `${d.ridingStyle}x${d.wheelSize}x${d.crankset.join('-')}x${d.cassette.join('-')}`,
@@ -79,7 +78,6 @@ function App() {
       <Header />
 
       <div className='flex w-full flex-col items-center gap-2 md:w-fit md:flex-row md:flex-wrap md:items-stretch md:justify-center'>
-        {/* {drivetrains.length < 5 && <div className='hidden h-14 w-14 flex-shrink border sm:flex'></div>} */}
         <>
           {drivetrains.map((drivetrain) => (
             <DrivetrainInput key={drivetrain.id} drivetrain={drivetrain} />
