@@ -160,7 +160,9 @@ function InputSlot({ index, inputRefs, cog, numberOfFilledCogs, maxLength, setCo
         inputRefs.current[index] = element;
       }}
       className={cn('hidden h-10 w-10 border-2 text-center font-semibold', index <= numberOfFilledCogs && 'block')}
-      type='text'
+      type='tel'
+      pattern='^\d{0,2}$'
+      inputMode='numeric'
       name={index + ''}
       value={cog}
       onPaste={(e) => {
@@ -179,19 +181,21 @@ function InputSlot({ index, inputRefs, cog, numberOfFilledCogs, maxLength, setCo
 
         insertCogs(parsedCogs.data);
       }}
-      onChange={() => {}}
-      onKeyDown={(e) => {
-        // console.log(e.key);
+      onChange={(e) => {
+        const value = e.target.value;
+        const numberRegex = /^\d{0,2}$/;
 
-        if (Number.isInteger(+e.key)) {
-          if (cog.length === 0) {
-            setCog(cog + e.key);
-          }
-          if (cog.length === 1) {
-            setCog(cog + e.key);
+        if (value.length <= 2 && numberRegex.test(value)) {
+          setCog(value);
+
+          if (value.length === 2) {
             focusOnNext();
           }
-        } else if (e.key === 'Backspace') {
+        }
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Backspace') {
+          e.preventDefault();
           if (cog.length > 0) {
             setCog(cog.slice(0, -1));
           }
@@ -215,9 +219,10 @@ function InputSlot({ index, inputRefs, cog, numberOfFilledCogs, maxLength, setCo
         } else if (e.key === 'ArrowRight') {
           const cursorPosition = (e as unknown as React.ChangeEvent<HTMLInputElement>).target.selectionStart;
 
-          if (cursorPosition === cog.length && index < maxLength) {
+          if (cursorPosition === cog.length && index < numberOfFilledCogs) {
             e.preventDefault();
             focusOnNext();
+            inputRefs.current[index + 1]?.setSelectionRange(0, 0);
           }
         } else if (e.key === 'Escape') {
           inputRefs.current[index]?.blur();
