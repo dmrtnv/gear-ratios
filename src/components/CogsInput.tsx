@@ -187,9 +187,10 @@ function InputSlot({ index, inputRefs, cog, numberOfFilledCogs, maxLength, setCo
 
         if (value.length <= 2 && numberRegex.test(value)) {
           setCog(value);
-        }
-        if (value.length === 2) {
-          focusOnNext();
+
+          if (value.length === 2) {
+            focusOnNext();
+          }
         }
       }}
       onKeyDown={(e) => {
