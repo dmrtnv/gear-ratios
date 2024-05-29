@@ -179,19 +179,29 @@ function InputSlot({ index, inputRefs, cog, numberOfFilledCogs, maxLength, setCo
 
         insertCogs(parsedCogs.data);
       }}
-      onChange={() => {}}
+      onChange={(e) => {
+        const value = e.target.value;
+
+        if (value.length <= 2 && !Number.isNaN(Number.parseInt(value))) {
+          setCog(value);
+        }
+        if (value.length === 2) {
+          focusOnNext();
+        }
+      }}
       onKeyDown={(e) => {
         // console.log(e.key);
 
-        if (Number.isInteger(+e.key)) {
-          if (cog.length === 0) {
-            setCog(cog + e.key);
-          }
-          if (cog.length === 1) {
-            setCog(cog + e.key);
-            focusOnNext();
-          }
-        } else if (e.key === 'Backspace') {
+        // if (Number.isInteger(+e.key)) {
+        //   if (cog.length === 0) {
+        //     setCog(cog + e.key);
+        //   }
+        //   if (cog.length === 1) {
+        //     setCog(cog + e.key);
+        //     focusOnNext();
+        //   }
+        // } else
+        if (e.key === 'Backspace') {
           if (cog.length > 0) {
             setCog(cog.slice(0, -1));
           }
