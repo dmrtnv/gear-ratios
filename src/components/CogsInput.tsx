@@ -160,7 +160,7 @@ function InputSlot({ index, inputRefs, cog, numberOfFilledCogs, maxLength, setCo
         inputRefs.current[index] = element;
       }}
       className={cn('hidden h-10 w-10 border-2 text-center font-semibold', index <= numberOfFilledCogs && 'block')}
-      type='text'
+      type='number'
       name={index + ''}
       value={cog}
       onPaste={(e) => {
