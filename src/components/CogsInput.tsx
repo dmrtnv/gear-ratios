@@ -161,7 +161,7 @@ function InputSlot({ index, inputRefs, cog, numberOfFilledCogs, maxLength, setCo
       }}
       className={cn('hidden h-10 w-10 border-2 text-center font-semibold', index <= numberOfFilledCogs && 'block')}
       type='tel'
-      pattern='^\d{2}$'
+      pattern='^\d{0,2}$'
       inputMode='numeric'
       name={index + ''}
       value={cog}
@@ -183,7 +183,7 @@ function InputSlot({ index, inputRefs, cog, numberOfFilledCogs, maxLength, setCo
       }}
       onChange={(e) => {
         const value = e.target.value;
-        const numberRegex = /^\d{2}$/;
+        const numberRegex = /^\d{0,2}$/;
 
         if (value.length <= 2 && numberRegex.test(value)) {
           setCog(value);
