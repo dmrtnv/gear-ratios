@@ -24,7 +24,7 @@ function ColorSelect({ color, setColor }: ColorSelectProps) {
             }
             className={cn(
               'h-6 w-6 cursor-pointer rounded-full bg-[var(--bg-color)]',
-              clr.name === color.name && 'cursor-default outline outline-[var(--outline-color)]',
+              clr.name === color.name && 'cursor-default outline outline-[3px] outline-[var(--outline-color)]',
             )}
           >
             <input
