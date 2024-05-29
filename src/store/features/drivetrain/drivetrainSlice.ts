@@ -1,5 +1,7 @@
 import { COLORS } from '@/types/Color';
 import { Drivetrain } from '@/types/Drivetrain';
+import { RidingStyle } from '@/types/RidingStyle';
+import { WheelSize } from '@/types/WheelSize';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -50,12 +52,24 @@ export const drivetrainSlice = createSlice({
         cassette: [],
       });
     },
-    addNew({ drivetrains }) {
+    addNew(state) {
+      const { drivetrains, options } = state;
+      let ridingStyle: RidingStyle = 'road';
+      let wheelSize: WheelSize = '28';
+
+      if (options.linkRidingStyle && drivetrains.length > 0) {
+        ridingStyle = drivetrains[0].ridingStyle;
+      }
+
+      if (options.linkWheelSize && drivetrains.length > 0) {
+        wheelSize = drivetrains[0].wheelSize;
+      }
+
       drivetrains.push({
         id: uuidv4(),
         name: `Drivetrain ${drivetrains.length + 1}`,
-        ridingStyle: 'road',
-        wheelSize: '28',
+        ridingStyle,
+        wheelSize,
         color: COLORS[drivetrains.length],
         cassette: [],
         crankset: [],
