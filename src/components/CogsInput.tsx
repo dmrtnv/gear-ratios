@@ -161,7 +161,7 @@ function InputSlot({ index, inputRefs, cog, numberOfFilledCogs, maxLength, setCo
       }}
       className={cn('hidden h-10 w-10 border-2 text-center font-semibold', index <= numberOfFilledCogs && 'block')}
       type='tel'
-      pattern='[0-9]{1,2}'
+      pattern='\d{1,2}'
       inputMode='numeric'
       name={index + ''}
       value={cog}
@@ -192,18 +192,8 @@ function InputSlot({ index, inputRefs, cog, numberOfFilledCogs, maxLength, setCo
         }
       }}
       onKeyDown={(e) => {
-        // console.log(e.key);
-
-        // if (Number.isInteger(+e.key)) {
-        //   if (cog.length === 0) {
-        //     setCog(cog + e.key);
-        //   }
-        //   if (cog.length === 1) {
-        //     setCog(cog + e.key);
-        //     focusOnNext();
-        //   }
-        // } else
         if (e.key === 'Backspace') {
+          e.preventDefault();
           if (cog.length > 0) {
             setCog(cog.slice(0, -1));
           }
