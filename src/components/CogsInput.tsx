@@ -222,6 +222,7 @@ function InputSlot({ index, inputRefs, cog, numberOfFilledCogs, maxLength, setCo
           if (cursorPosition === cog.length && index < maxLength) {
             e.preventDefault();
             focusOnNext();
+            inputRefs.current[index + 1]?.setSelectionRange(0, 0);
           }
         } else if (e.key === 'Escape') {
           inputRefs.current[index]?.blur();
