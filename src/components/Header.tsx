@@ -55,7 +55,7 @@ function Header() {
         )}
       >
         <div ref={leftElementRef} className='overflow-hidden duration-700'>
-          <h1 className='relative -z-10 min-w-fit translate-x-full text-right text-4xl font-bold tracking-widest duration-700 ease-out group-hover:translate-x-0 group-active:underline group-active:underline-offset-4'>
+          <h1 className='relative -z-10 min-w-fit translate-x-full text-right text-4xl font-bold tracking-widest decoration-4 duration-700 ease-out group-hover:translate-x-0 group-active:underline'>
             GEAR RAT
           </h1>
         </div>
@@ -67,7 +67,7 @@ function Header() {
           />
         </div>
         <div ref={rightElementRef} className='overflow-hidden duration-700'>
-          <div className='relative -z-10 min-w-max -translate-x-full text-4xl font-black tracking-widest  duration-700  ease-out group-hover:translate-x-0 group-active:underline group-active:underline-offset-4'>
+          <div className='relative -z-10 min-w-max -translate-x-full text-4xl font-black tracking-widest  decoration-4  duration-700 ease-out group-hover:translate-x-0 group-active:underline'>
             S
           </div>
         </div>
