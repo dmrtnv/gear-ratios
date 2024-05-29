@@ -219,7 +219,7 @@ function InputSlot({ index, inputRefs, cog, numberOfFilledCogs, maxLength, setCo
         } else if (e.key === 'ArrowRight') {
           const cursorPosition = (e as unknown as React.ChangeEvent<HTMLInputElement>).target.selectionStart;
 
-          if (cursorPosition === cog.length && index < maxLength) {
+          if (cursorPosition === cog.length && index < numberOfFilledCogs) {
             e.preventDefault();
             focusOnNext();
             inputRefs.current[index + 1]?.setSelectionRange(0, 0);
