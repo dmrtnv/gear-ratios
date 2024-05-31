@@ -74,7 +74,7 @@ function LinkButton({ toggle }: { toggle: () => void }) {
         <Slash
           size={16}
           className={cn(
-            '-rotate-45 text-muted-foreground transition-all duration-300',
+            '-rotate-45  transition-all duration-300',
             active ? '-rotate-12 opacity-100' : 'opacity-0 delay-150',
           )}
         />
@@ -85,17 +85,13 @@ function LinkButton({ toggle }: { toggle: () => void }) {
             active && 'max-w-16',
           )}
         >
-          {link ? (
-            <span className='text-muted-foreground'>linked</span>
-          ) : (
-            <span className='text-muted-foreground'>unlinked</span>
-          )}
+          {link ? <span className=''>linked</span> : <span className=''>unlinked</span>}
         </div>
 
         <Slash
           size={16}
           className={cn(
-            'relative -translate-x-[100%] -rotate-45 text-muted-foreground transition-all duration-300',
+            'relative -translate-x-[100%] -rotate-45  transition-all duration-300',
             active ? 'translate-x-0 -rotate-12 opacity-100' : 'opacity-0 delay-150',
           )}
         />
