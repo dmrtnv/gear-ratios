@@ -4,7 +4,7 @@ import { drivetrainSlice } from '@/store/features/drivetrain/drivetrainSlice';
 import { Drivetrain } from '@/types/Drivetrain';
 import { RIDING_STYLES, RidingStyle } from '@/types/RidingStyle';
 import _ from 'lodash';
-import { Link2, Link2Off } from 'lucide-react';
+import { Link2, Link2Off, Slash } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 
 type RidingStyleSelectProps = {
@@ -70,15 +70,35 @@ function LinkButton({ toggle }: { toggle: () => void }) {
         {link ? <Link2 size={18} strokeWidth={2} /> : <Link2Off size={18} strokeWidth={2} />}
       </button>
 
-      <div className='flex items-center justify-center'>
-        <span className='mr-1'>/</span>
+      <div className='group flex items-center justify-center'>
+        <Slash
+          size={16}
+          className={cn(
+            '-rotate-45 text-muted-foreground transition-all duration-300',
+            active ? '-rotate-12 opacity-100' : 'opacity-0 delay-150',
+          )}
+        />
+
         <div
-          data-state={active ? 'enabled' : 'disabled'}
-          className='overflow-hidden text-nowrap transition-[width] duration-1000 ease-out data-[state=active]:w-[100px] data-[state=disabled]:w-0'
+          className={cn(
+            'max-w-0 overflow-hidden text-nowrap transition-[max-width] duration-300',
+            active && 'max-w-16',
+          )}
         >
-          {link ? <span>riding styles linked</span> : <span>riding styles unlinked</span>}
+          {link ? (
+            <span className='text-muted-foreground'>linked</span>
+          ) : (
+            <span className='text-muted-foreground'>unlinked</span>
+          )}
         </div>
-        <span className='ml-1'>/</span>
+
+        <Slash
+          size={16}
+          className={cn(
+            'relative -translate-x-[100%] -rotate-45 text-muted-foreground transition-all duration-300',
+            active ? 'translate-x-0 -rotate-12 opacity-100' : 'opacity-0 delay-150',
+          )}
+        />
       </div>
     </div>
   );
