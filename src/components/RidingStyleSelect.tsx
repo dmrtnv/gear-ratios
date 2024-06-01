@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { drivetrainSlice } from '@/store/features/drivetrain/drivetrainSlice';
 import { Drivetrain } from '@/types/Drivetrain';
 import { RIDING_STYLES, RidingStyle } from '@/types/RidingStyle';
-import { Link2, Link2Off } from 'lucide-react';
+import { LinkButton } from './LinkButton';
 
 type RidingStyleSelectProps = {
   drivetrain: Drivetrain;
@@ -41,9 +41,7 @@ function RidingStyleSelect({ drivetrain }: RidingStyleSelectProps) {
           </label>
         ))}
 
-        <button className='ml-2 mt-1' onClick={() => dispatch(toggleLinkRidingStyle(drivetrain.id))}>
-          {link ? <Link2 size={18} strokeWidth={2} /> : <Link2Off size={18} strokeWidth={2} />}
-        </button>
+        <LinkButton link={link} toggle={() => dispatch(toggleLinkRidingStyle(drivetrain.id))} />
       </div>
     </fieldset>
   );
