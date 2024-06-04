@@ -1,4 +1,3 @@
-import { cn } from '@/lib/utils';
 import { COLORS, Color } from '@/types/Color';
 import React from 'react';
 
@@ -14,28 +13,24 @@ function ColorSelect({ color, setColor }: ColorSelectProps) {
 
       <div className='flex gap-4'>
         {COLORS.map((clr) => (
-          <label
-            key={clr.name}
-            style={
-              {
-                '--bg-color': `${clr.hexValue}a0`,
-                '--outline-color': `${clr.hexValue}d2`,
-              } as React.CSSProperties
-            }
-            className={cn(
-              'h-6 w-6 cursor-pointer rounded-full bg-[var(--bg-color)]',
-              clr.name === color.name && 'cursor-default outline outline-[3px] outline-[var(--outline-color)]',
-            )}
-          >
+          <div key={clr.name}>
+            <label htmlFor={clr.name}>{clr.name}</label>
             <input
+              id={clr.name}
+              style={
+                {
+                  '--bg-color': `${clr.hexValue}a0`,
+                  '--outline-color': `${clr.hexValue}d2`,
+                } as React.CSSProperties
+              }
               checked={clr.name === color.name}
-              className='sr-only'
+              className='h-6 w-6 cursor-pointer appearance-none rounded-full bg-[var(--bg-color)] outline-[3px] outline-[var(--outline-color)] checked:cursor-default checked:outline'
               onChange={(e) => setColor(COLORS.find((c) => c.name === e.target.value) as Color)}
               type='radio'
               name='color'
               value={clr.name}
             />
-          </label>
+          </div>
         ))}
       </div>
     </fieldset>
