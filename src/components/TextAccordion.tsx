@@ -2,24 +2,24 @@ import { cn } from '@/lib/utils';
 import _ from 'lodash';
 import { Slash } from 'lucide-react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { TextAccordionProvider, useTextAccordion } from './TextAccordionContext';
+import { Options, TextAccordionProvider, useTextAccordion } from './TextAccordionContext';
 import { TextAccordionItemProvider, useTextAccordionItem } from './TextAccordionItemContext';
 
 type TextAccordionProps = {
   children: React.ReactNode;
   className?: string;
-  closeAfterMilliseconds?: number;
-  togglableClose?: boolean;
-};
+} & Options;
 
 export function TextAccordion({
   children,
   className = '',
   closeAfterMilliseconds,
-  togglableClose = false,
+  collapsible = false,
+  type = 'single',
+  defaultOpenItems = [],
 }: TextAccordionProps) {
   return (
-    <TextAccordionProvider options={{ closeAfterMilliseconds, togglableClose }}>
+    <TextAccordionProvider options={{ closeAfterMilliseconds, collapsible, type, defaultOpenItems }}>
       <div className={cn('', className)}>{children}</div>
     </TextAccordionProvider>
   );
@@ -36,7 +36,7 @@ export function TextAccordionItem({ id, children, className = '' }: TextAccordio
 
   useEffect(() => {
     registerItem(id);
-  }, []);
+  }, [id, registerItem]);
 
   return (
     <TextAccordionItemProvider id={id}>
@@ -53,7 +53,7 @@ type TextAccordionTriggerProps = {
 };
 
 export function TextAccordionTrigger({ children, action, className = '', asChild = false }: TextAccordionTriggerProps) {
-  const { closeAfterMilliseconds, togglableClose } = useTextAccordion().options;
+  const { closeAfterMilliseconds, collapsible } = useTextAccordion().options;
   const { state, setOpenState, setClosedState } = useTextAccordionItem();
 
   const deboucedSetClosed = useCallback(
@@ -64,7 +64,7 @@ export function TextAccordionTrigger({ children, action, className = '', asChild
   const handleClick = () => {
     if (action) action();
 
-    if (togglableClose) {
+    if (collapsible) {
       if (state === 'closed') setOpenState();
       if (state === 'open') setClosedState();
     } else {

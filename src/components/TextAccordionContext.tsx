@@ -15,7 +15,12 @@ type TextAccordionContextProps = {
 
 const TextAccordionContext = createContext<TextAccordionContextProps | undefined>(undefined);
 
-type Options = { closeAfterMilliseconds?: number; togglableClose?: boolean };
+export type Options = {
+  closeAfterMilliseconds?: number;
+  collapsible?: boolean;
+  type?: 'single' | 'multiple';
+  defaultOpenItems?: string[];
+};
 
 type TextAccordionProviderProps = {
   children: React.ReactNode;
@@ -25,6 +30,8 @@ type TextAccordionProviderProps = {
 export function TextAccordionProvider({ children, options }: TextAccordionProviderProps) {
   const [items, setItems] = useState<Item[]>([]);
 
+  console.log(items);
+
   const getItem = (id: string) => {
     return items.find((item) => item.id === id);
   };
@@ -33,7 +40,13 @@ export function TextAccordionProvider({ children, options }: TextAccordionProvid
     if (getItem(id)) return;
 
     const setOpenState = () => {
-      setItems((prevItems) => prevItems.map((item) => (id === item.id ? { ...item, state: 'open' } : item)));
+      setItems((prevItems) =>
+        prevItems.map((item) =>
+          id === item.id
+            ? { ...item, state: 'open' }
+            : { ...item, ...(options.type === 'single' && { state: 'closed' }) },
+        ),
+      );
     };
 
     const setClosedState = () => {
@@ -44,7 +57,7 @@ export function TextAccordionProvider({ children, options }: TextAccordionProvid
       ...items,
       {
         id,
-        state: 'closed',
+        state: options.defaultOpenItems?.includes(id) ? 'open' : 'closed',
         setOpenState,
         setClosedState,
       },
