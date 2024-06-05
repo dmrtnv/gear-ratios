@@ -1,28 +1,58 @@
 import React, { createContext, useContext, useState } from 'react';
 
-type TextAccordionContextProps = {
+type Item = {
+  id: string;
   state: 'open' | 'closed';
   setOpenState: () => void;
   setClosedState: () => void;
 };
 
+type TextAccordionContextProps = {
+  registerItem: (id: string) => void;
+  getItem: (id: string) => Item | undefined;
+  options: Options;
+};
+
 const TextAccordionContext = createContext<TextAccordionContextProps | undefined>(undefined);
 
-export function TextAccordionProvider({ children }: { children: React.ReactNode }) {
-  const [state, setState] = useState<'open' | 'closed'>('closed');
+type Options = { closeAfterMilliseconds?: number; togglableClose?: boolean };
 
-  const setOpenState = () => {
-    setState('open');
+type TextAccordionProviderProps = {
+  children: React.ReactNode;
+  options: Options;
+};
+
+export function TextAccordionProvider({ children, options }: TextAccordionProviderProps) {
+  const [items, setItems] = useState<Item[]>([]);
+
+  const getItem = (id: string) => {
+    return items.find((item) => item.id === id);
   };
 
-  const setClosedState = () => {
-    setState('closed');
+  const registerItem = (id: string) => {
+    if (getItem(id)) return;
+
+    const setOpenState = () => {
+      setItems((prevItems) => prevItems.map((item) => (id === item.id ? { ...item, state: 'open' } : item)));
+    };
+
+    const setClosedState = () => {
+      setItems((prevItems) => prevItems.map((item) => (id === item.id ? { ...item, state: 'closed' } : item)));
+    };
+
+    setItems([
+      ...items,
+      {
+        id,
+        state: 'closed',
+        setOpenState,
+        setClosedState,
+      },
+    ]);
   };
 
   return (
-    <TextAccordionContext.Provider value={{ state, setOpenState, setClosedState }}>
-      {children}
-    </TextAccordionContext.Provider>
+    <TextAccordionContext.Provider value={{ registerItem, getItem, options }}>{children}</TextAccordionContext.Provider>
   );
 }
 

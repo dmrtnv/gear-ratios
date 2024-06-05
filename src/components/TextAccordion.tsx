@@ -3,49 +3,107 @@ import _ from 'lodash';
 import { Slash } from 'lucide-react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { TextAccordionProvider, useTextAccordion } from './TextAccordionContext';
+import { TextAccordionItemProvider, useTextAccordionItem } from './TextAccordionItemContext';
 
-export function TextAccordion({ children, className }: { children: React.ReactNode; className?: string }) {
+type TextAccordionProps = {
+  children: React.ReactNode;
+  className?: string;
+  closeAfterMilliseconds?: number;
+  togglableClose?: boolean;
+};
+
+export function TextAccordion({
+  children,
+  className = '',
+  closeAfterMilliseconds,
+  togglableClose = false,
+}: TextAccordionProps) {
   return (
-    <TextAccordionProvider>
-      <div className={cn('flex items-center justify-center gap-3', className ?? '')}>{children}</div>
+    <TextAccordionProvider options={{ closeAfterMilliseconds, togglableClose }}>
+      <div className={cn('', className)}>{children}</div>
     </TextAccordionProvider>
   );
 }
 
-type TextAccordionTriggerProps = { children: React.ReactNode; action: () => void; className?: string };
+type TextAccordionItemProps = {
+  children: React.ReactNode;
+  id: string;
+  className?: string;
+};
 
-export function TextAccordionTrigger({ children, action, className }: TextAccordionTriggerProps) {
-  const { setOpenState, setClosedState } = useTextAccordion();
+export function TextAccordionItem({ id, children, className = '' }: TextAccordionItemProps) {
+  const { registerItem } = useTextAccordion();
+
+  useEffect(() => {
+    registerItem(id);
+  }, []);
+
+  return (
+    <TextAccordionItemProvider id={id}>
+      <div className={cn('flex items-center justify-center gap-3', className)}>{children}</div>
+    </TextAccordionItemProvider>
+  );
+}
+
+type TextAccordionTriggerProps = {
+  children: React.ReactNode;
+  action?: () => void;
+  className?: string;
+  asChild?: boolean;
+};
+
+export function TextAccordionTrigger({ children, action, className = '', asChild = false }: TextAccordionTriggerProps) {
+  const { closeAfterMilliseconds, togglableClose } = useTextAccordion().options;
+  const { state, setOpenState, setClosedState } = useTextAccordionItem();
 
   const deboucedSetClosed = useCallback(
-    _.debounce(() => setClosedState(), 2000),
+    _.debounce(() => setClosedState(), closeAfterMilliseconds),
     [],
   );
 
   const handleClick = () => {
-    action();
-    setOpenState();
-    deboucedSetClosed();
+    if (action) action();
+
+    if (togglableClose) {
+      if (state === 'closed') setOpenState();
+      if (state === 'open') setClosedState();
+    } else {
+      setOpenState();
+    }
+
+    if (closeAfterMilliseconds) deboucedSetClosed();
   };
 
+  if (asChild && React.isValidElement(children)) {
+    return (
+      <>
+        {React.cloneElement(children, {
+          ...children.props,
+          onClick: handleClick,
+          className: cn('select-none', children.props.className),
+        })}
+      </>
+    );
+  }
+
   return (
-    <button className={cn('', className ?? '')} onClick={handleClick}>
+    <button className={cn('select-none', className)} onClick={handleClick}>
       {children}
     </button>
   );
 }
 
-export function TextAccordionContent({ text }: { text: string }) {
-  const { state } = useTextAccordion();
-  const textRef = useRef<HTMLSpanElement>(null);
+export function TextAccordionContent({ children }: { children: React.ReactElement }) {
+  const { state } = useTextAccordionItem();
+  const childRef = useRef<Element>(null);
   const [width, setWidth] = useState(0);
 
   useEffect(() => {
-    if (textRef.current) {
-      const { width } = textRef.current.getBoundingClientRect();
+    if (childRef.current) {
+      const { width } = childRef.current.getBoundingClientRect();
       setWidth(Math.ceil(width));
     }
-  }, [text]);
+  }, [children]);
 
   return (
     <div className='group flex items-center justify-center'>
@@ -64,7 +122,7 @@ export function TextAccordionContent({ text }: { text: string }) {
           state === 'open' && 'max-w-[var(--width)]',
         )}
       >
-        <span ref={textRef}>{text}</span>
+        {React.cloneElement(children, { ref: childRef })}
       </div>
 
       <Slash
