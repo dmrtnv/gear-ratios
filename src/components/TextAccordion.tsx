@@ -106,19 +106,23 @@ export function TextAccordionContent({ children }: { children: React.ReactElemen
   }, [children]);
 
   return (
-    <div className='group flex items-center justify-center'>
+    <div
+      data-state={state}
+      style={{ '--width': width + 32 + 'px' } as React.CSSProperties}
+      className='group flex items-center justify-center transition-[max-width] duration-300 ease-in-out data-[state=closed]:max-w-0 data-[state=open]:max-w-[var(--width)]'
+    >
       <Slash
         size={16}
         className={cn(
-          '-rotate-45  transition-all duration-300',
-          state === 'open' ? '-rotate-12 opacity-100' : 'opacity-0 delay-150',
+          '-rotate-45 transition-all duration-300 ease-in-out',
+          state === 'open' ? '-rotate-12 opacity-100' : 'opacity-0',
         )}
       />
 
       <div
         style={{ '--width': width + 'px' } as React.CSSProperties}
         className={cn(
-          'max-w-0 overflow-hidden text-nowrap transition-[max-width] duration-300',
+          'max-w-0 overflow-hidden text-nowrap transition-[max-width] duration-300 ease-in-out',
           state === 'open' && 'max-w-[var(--width)]',
         )}
       >
@@ -128,8 +132,8 @@ export function TextAccordionContent({ children }: { children: React.ReactElemen
       <Slash
         size={16}
         className={cn(
-          'relative -translate-x-[100%] -rotate-45  transition-all duration-300',
-          state === 'open' ? 'translate-x-0 -rotate-12 opacity-100' : 'opacity-0 delay-150',
+          'relative -translate-x-[100%] -rotate-45 transition-all duration-300 ease-in-out',
+          state === 'open' ? 'translate-x-0 -rotate-12 opacity-100' : 'opacity-0',
         )}
       />
     </div>
