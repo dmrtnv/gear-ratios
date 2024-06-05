@@ -12,9 +12,9 @@ function ColorSelect({ color, setColor }: ColorSelectProps) {
     <fieldset>
       <legend className='mb-2 text-xl font-bold'>Color</legend>
 
-      <TextAccordion defaultOpenItems={[color.name]} className='flex gap-4'>
+      <TextAccordion defaultOpenItems={[color.name]} className='flex flex-wrap gap-3'>
         {COLORS.map((clr) => (
-          <TextAccordionItem id={clr.name} key={clr.name}>
+          <TextAccordionItem id={clr.name} key={clr.name} className='gap-2'>
             <TextAccordionTrigger asChild>
               <input
                 id={clr.name}
