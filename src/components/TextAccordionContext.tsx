@@ -30,8 +30,6 @@ type TextAccordionProviderProps = {
 export function TextAccordionProvider({ children, options }: TextAccordionProviderProps) {
   const [items, setItems] = useState<Item[]>([]);
 
-  console.log(items);
-
   const getItem = (id: string) => {
     return items.find((item) => item.id === id);
   };
