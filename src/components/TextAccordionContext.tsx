@@ -12,8 +12,6 @@ type TextAccordionContextProps = {
   options: Options;
 };
 
-const TextAccordionContext = createContext<TextAccordionContextProps | undefined>(undefined);
-
 export type Options = {
   closeAfterMilliseconds?: number;
   collapsible?: boolean;
@@ -26,6 +24,12 @@ type TextAccordionProviderProps = {
   options: Options;
   ids: string[];
 };
+
+/* 
+    TextAccordion provider
+*/
+
+const TextAccordionContext = createContext<TextAccordionContextProps | undefined>(undefined);
 
 export function TextAccordionProvider({ children, options, ids }: TextAccordionProviderProps) {
   const [items, setItems] = useState<TextAccordionItem[]>([]);
@@ -76,19 +80,22 @@ export function useTextAccordion() {
   return context;
 }
 
+/* 
+    TextAccordionItem provider
+*/
+
 const TextAccordionItemContext = createContext<TextAccordionItem | undefined>(undefined);
 
 export function TextAccordionItemProvider({ children, id }: { children: React.ReactNode; id: string }) {
   const [item, setItem] = useState<TextAccordionItem | undefined>(undefined);
   const { getItem } = useTextAccordion();
+  const defaultItem: TextAccordionItem = { id, state: 'closed', setClosedState: () => {}, setOpenState: () => {} };
 
   useEffect(() => {
     setItem(getItem(id));
   }, [id, getItem]);
 
-  if (!item) return;
-
-  return <TextAccordionItemContext.Provider value={item}>{children}</TextAccordionItemContext.Provider>;
+  return <TextAccordionItemContext.Provider value={item ?? defaultItem}>{children}</TextAccordionItemContext.Provider>;
 }
 
 export function useTextAccordionItem() {

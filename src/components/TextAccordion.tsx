@@ -29,10 +29,8 @@ export function TextAccordion({
     }
   });
 
-  if (!ids) return;
-
   return (
-    <TextAccordionProvider ids={ids} options={{ closeAfterMilliseconds, collapsible, type, defaultOpenItems }}>
+    <TextAccordionProvider ids={ids ?? []} options={{ closeAfterMilliseconds, collapsible, type, defaultOpenItems }}>
       <div className={cn('', className)}>{children}</div>
     </TextAccordionProvider>
   );
@@ -45,12 +43,6 @@ type TextAccordionItemProps = {
 };
 
 export function TextAccordionItem({ id, children, className = '' }: TextAccordionItemProps) {
-  // const { registerItem } = useTextAccordion();
-
-  // useEffect(() => {
-  //   registerItem(id);
-  // }, [id, registerItem]);
-
   return (
     <TextAccordionItemProvider id={id}>
       <div className={cn('flex items-center justify-center gap-3', className)}>{children}</div>
@@ -110,11 +102,6 @@ export function TextAccordionContent({ children }: { children: React.ReactElemen
   const { state } = useTextAccordionItem();
   const childRef = useRef<Element>(null);
   const [width, setWidth] = useState(0);
-  const [initialRender, setInitialRender] = useState(true);
-
-  useEffect(() => {
-    setTimeout(() => setInitialRender(false), 1);
-  }, []);
 
   useEffect(() => {
     if (childRef.current) {
@@ -129,16 +116,12 @@ export function TextAccordionContent({ children }: { children: React.ReactElemen
       style={{ '--width': width + 32 + 'px' } as React.CSSProperties}
       className={cn(
         'group flex items-center justify-center transition-[max-width] duration-300 ease-in-out data-[state=closed]:max-w-0 data-[state=open]:max-w-[var(--width)]',
-        initialRender && 'duration-0',
       )}
     >
       <Slash
         data-state={state}
         size={16}
-        className={cn(
-          '-rotate-45 transition-all duration-300 ease-in-out data-[state=open]:-rotate-12',
-          initialRender && 'duration-0',
-        )}
+        className={cn('-rotate-45 transition-all duration-300 ease-in-out data-[state=open]:-rotate-12')}
       />
 
       <div
@@ -146,7 +129,6 @@ export function TextAccordionContent({ children }: { children: React.ReactElemen
         style={{ '--width': width + 'px' } as React.CSSProperties}
         className={cn(
           'max-w-0 overflow-hidden text-nowrap transition-[max-width] duration-300 ease-in-out data-[state=open]:max-w-[var(--width)]',
-          initialRender && 'duration-0',
         )}
       >
         {React.cloneElement(children, { ref: childRef })}
@@ -157,7 +139,6 @@ export function TextAccordionContent({ children }: { children: React.ReactElemen
         size={16}
         className={cn(
           'relative -translate-x-[100%] -rotate-45 transition-all duration-300 ease-in-out data-[state=open]:translate-x-0 data-[state=open]:-rotate-12',
-          initialRender && 'duration-0',
         )}
       />
     </div>
