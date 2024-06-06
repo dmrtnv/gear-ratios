@@ -40,7 +40,9 @@ function DrivetrainInput({ drivetrain }: { drivetrain: Drivetrain }) {
   return (
     <div className='flex w-full flex-1 flex-col justify-between gap-6 border-2 p-4 md:w-fit'>
       <div className='flex flex-1 flex-col space-y-6'>
-        <h2 className='min-w-fit text-2xl font-bold'>{drivetrain.name}</h2>
+        <h2 className='mt-4 min-w-fit text-center text-3xl font-bold'>{drivetrain.name}</h2>
+
+        <Separator />
 
         <RidingStyleSelect drivetrain={drivetrain} />
 
@@ -108,7 +110,7 @@ function DrivetrainDescription({ drivetrain }: { drivetrain: Drivetrain }) {
       <ul className='space-y-1'>
         {maxSpeed.score !== 'not applicable' && (
           <li className='@container'>
-            <div className='@[424px]:flex-row flex flex-col'>
+            <div className='flex flex-col @[424px]:flex-row'>
               <h4 className='w-1/3 font-semibold'>Max speed:</h4>
               <div className='flex items-center gap-3'>
                 {maxSpeed.score === 'poor' && <Frown className='text-red-500' size={18} />}
@@ -124,7 +126,7 @@ function DrivetrainDescription({ drivetrain }: { drivetrain: Drivetrain }) {
         )}
         {minSpeed.score !== 'not applicable' && (
           <li className='@container'>
-            <div className='@[424px]:flex-row flex flex-col'>
+            <div className='flex flex-col @[424px]:flex-row'>
               <h4 className='w-1/3 font-semibold'>Min speed:</h4>
               <div className='flex items-center gap-3'>
                 {minSpeed.score === 'poor' && <Frown className='text-red-500' size={18} />}
@@ -140,7 +142,7 @@ function DrivetrainDescription({ drivetrain }: { drivetrain: Drivetrain }) {
         )}
         {gearRange.score !== 'not applicable' && (
           <li className='@container'>
-            <div className='@[424px]:flex-row flex flex-col'>
+            <div className='flex flex-col @[424px]:flex-row'>
               <h4 className='w-1/3 font-semibold'>Gear range:</h4>
               <div className='flex items-center gap-3'>
                 {gearRange.score === 'poor' && <Frown className='text-red-500' size={18} />}
@@ -153,7 +155,7 @@ function DrivetrainDescription({ drivetrain }: { drivetrain: Drivetrain }) {
         )}
         {averageStep.score !== 'not applicable' && (
           <li className='@container'>
-            <div className='@[424px]:flex-row flex flex-col'>
+            <div className='flex flex-col @[424px]:flex-row'>
               <h4 className='w-1/3 font-semibold'>Average step:</h4>
               <div className='flex items-center gap-3'>
                 {averageStep.score === 'poor' && <Frown className='text-red-500' size={18} />}
@@ -166,7 +168,7 @@ function DrivetrainDescription({ drivetrain }: { drivetrain: Drivetrain }) {
         )}
         {maxStep.score !== 'not applicable' && (
           <li className='@container'>
-            <div className='@[424px]:flex-row flex flex-col'>
+            <div className='flex flex-col @[424px]:flex-row'>
               <h4 className='w-1/3 font-semibold'>Max step:</h4>
               <div className='flex items-center gap-3'>
                 {maxStep.score === 'poor' && <Frown className='text-red-500' size={18} />}
