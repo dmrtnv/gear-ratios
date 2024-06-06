@@ -1,5 +1,5 @@
 import { COLORS, Color } from '@/types/Color';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { TextAccordion, TextAccordionContent, TextAccordionItem, TextAccordionTrigger } from './TextAccordion';
 
 type ColorSelectProps = {
@@ -8,6 +8,12 @@ type ColorSelectProps = {
 };
 
 function ColorSelect({ color, setColor }: ColorSelectProps) {
+  const [inputIdSalt, setInputSalt] = useState('');
+
+  useEffect(() => {
+    setInputSalt(crypto.randomUUID());
+  }, []);
+
   return (
     <fieldset>
       <legend className='mb-2 text-xl font-bold'>Color</legend>
@@ -17,7 +23,7 @@ function ColorSelect({ color, setColor }: ColorSelectProps) {
           <TextAccordionItem id={clr.name} key={clr.name} className='gap-2'>
             <TextAccordionTrigger asChild>
               <input
-                id={clr.name}
+                id={clr.name + inputIdSalt}
                 style={
                   {
                     '--bg-color': `${clr.hexValue}a0`,
@@ -25,15 +31,15 @@ function ColorSelect({ color, setColor }: ColorSelectProps) {
                   } as React.CSSProperties
                 }
                 checked={clr.name === color.name}
-                className='h-6 w-6 cursor-pointer appearance-none rounded-full bg-[var(--bg-color)] outline-[3px] outline-[var(--outline-color)] checked:cursor-default checked:outline'
+                className='h-6 w-6 cursor-pointer appearance-none rounded-full bg-[var(--bg-color)] outline-[3px] outline-[var(--outline-color)]  checked:cursor-default checked:outline'
                 onChange={(e) => setColor(COLORS.find((c) => c.name === e.target.value) as Color)}
                 type='radio'
-                name='color'
+                name={'color-' + inputIdSalt}
                 value={clr.name}
               />
             </TextAccordionTrigger>
             <TextAccordionContent>
-              <label htmlFor={clr.name}>{clr.name}</label>
+              <label htmlFor={clr.name + inputIdSalt}>{clr.name}</label>
             </TextAccordionContent>
           </TextAccordionItem>
         ))}
