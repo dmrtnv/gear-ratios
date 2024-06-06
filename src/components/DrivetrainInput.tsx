@@ -8,8 +8,8 @@ import {
 } from '@/lib/describeDrivetrain';
 import { drivetrainSlice } from '@/store/features/drivetrain/drivetrainSlice';
 import { Drivetrain } from '@/types/Drivetrain';
-import { Frown, Meh, Smile, Trash2 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Check, Frown, Meh, Pencil, Smile, Trash2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import CogsInput from './CogsInput';
 import ColorSelect from './ColorSelect';
 import RidingStyleSelect from './RidingStyleSelect';
@@ -38,11 +38,17 @@ function DrivetrainInput({ drivetrain }: { drivetrain: Drivetrain }) {
   }, [inputDrivetrain]);
 
   return (
-    <div className='flex w-full flex-1 flex-col justify-between gap-6 border-2 p-4 md:w-fit'>
+    <div
+      style={{ '--bg-color': drivetrain.color.hexValue + '25' } as React.CSSProperties}
+      className='flex w-full flex-1 flex-col justify-between gap-6 rounded-2xl bg-[var(--bg-color)] p-4 shadow-lg transition-colors duration-300 md:w-fit'
+    >
       <div className='flex flex-1 flex-col space-y-6'>
-        <h2 className='mt-4 min-w-fit text-center text-3xl font-bold'>{drivetrain.name}</h2>
-
-        <Separator />
+        <DrivetrainInputHeader
+          name={drivetrain.name}
+          setName={(name: string) => {
+            dispatch(update({ ...drivetrain, name }));
+          }}
+        />
 
         <RidingStyleSelect drivetrain={drivetrain} />
 
@@ -183,6 +189,69 @@ function DrivetrainDescription({ drivetrain }: { drivetrain: Drivetrain }) {
           </li>
         )}
       </ul>
+    </div>
+  );
+}
+
+function DrivetrainInputHeader({ name, setName }: { name: string; setName: (arg0: string) => void }) {
+  const [isEditModeEnabled, setIsEditModeEnabled] = useState(false);
+  const [inputValue, setInputValue] = useState(name);
+  const [inputId, setInputId] = useState('');
+
+  useEffect(() => {
+    setInputId(crypto.randomUUID());
+  }, []);
+
+  return (
+    <div className='group relative flex w-full justify-center rounded-lg p-3 transition-all duration-300 focus-within:bg-background/50 focus-within:shadow-sm hover:bg-background/60 hover:shadow-sm'>
+      {isEditModeEnabled ? (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+
+            if (inputValue) setName(inputValue);
+            if (!inputValue) setInputValue(name);
+
+            setIsEditModeEnabled(false);
+          }}
+        >
+          <input
+            id={inputId}
+            type='text'
+            autoFocus
+            maxLength={20}
+            value={inputValue}
+            onFocus={(e) => e.target.setSelectionRange(0, -1)}
+            onKeyDown={(e) => e.key === 'Escape' && (e.target as HTMLInputElement).blur()}
+            onBlur={(e) => {
+              if (e.relatedTarget?.id === 'submit-' + inputId) return;
+
+              setIsEditModeEnabled(false);
+              setInputValue(name);
+            }}
+            onChange={(e) => setInputValue(e.target.value)}
+            className='flex max-w-80 bg-transparent text-center text-3xl font-bold outline-none'
+          />
+
+          <button
+            id={'submit-' + inputId}
+            type='submit'
+            className='absolute right-3 top-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-300 group-focus-within:opacity-100 group-hover:opacity-100'
+          >
+            <Check size={18} />
+          </button>
+        </form>
+      ) : (
+        <>
+          <h2 className='text-center text-3xl font-bold'>{name}</h2>
+          <button
+            onClick={() => setIsEditModeEnabled(true)}
+            className='absolute right-3 top-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-300 group-focus-within:opacity-100 group-hover:opacity-100'
+          >
+            <Pencil size={18} />
+          </button>
+        </>
+      )}
     </div>
   );
 }
