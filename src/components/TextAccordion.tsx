@@ -2,8 +2,13 @@ import { cn } from '@/lib/utils';
 import _ from 'lodash';
 import { Slash } from 'lucide-react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Options, TextAccordionProvider, useTextAccordion } from './TextAccordionContext';
-import { TextAccordionItemProvider, useTextAccordionItem } from './TextAccordionItemContext';
+import {
+  Options,
+  TextAccordionProvider,
+  useTextAccordion,
+  TextAccordionItemProvider,
+  useTextAccordionItem,
+} from './TextAccordionContext';
 
 type TextAccordionProps = {
   children: React.ReactNode;
@@ -19,11 +24,9 @@ export function TextAccordion({
   defaultOpenItems = [],
 }: TextAccordionProps) {
   const ids = React.Children.map(children, (child) => {
-    if (!(React.isValidElement(child) && child.type === TextAccordionItem)) {
-      throw new Error('Only TextAccordionItem as direct children of TextAccordion');
+    if (React.isValidElement(child)) {
+      return child.props.id as string;
     }
-
-    return child.props.id as string;
   });
 
   if (!ids) return;
