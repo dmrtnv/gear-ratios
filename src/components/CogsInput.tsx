@@ -159,7 +159,10 @@ function InputSlot({ index, inputRefs, cog, numberOfFilledCogs, maxLength, setCo
       ref={(element) => {
         inputRefs.current[index] = element;
       }}
-      className={cn('hidden h-10 w-10 border-2 text-center font-semibold', index <= numberOfFilledCogs && 'block')}
+      className={cn(
+        'hidden h-10 w-10 rounded-md bg-background/50 text-center font-semibold shadow-sm outline-none',
+        index <= numberOfFilledCogs && 'block',
+      )}
       type='tel'
       pattern='^\d{0,2}$'
       inputMode='numeric'
