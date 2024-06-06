@@ -18,8 +18,18 @@ export function TextAccordion({
   type = 'single',
   defaultOpenItems = [],
 }: TextAccordionProps) {
+  const ids = React.Children.map(children, (child) => {
+    if (!(React.isValidElement(child) && child.type === TextAccordionItem)) {
+      throw new Error('Only TextAccordionItem as direct children of TextAccordion');
+    }
+
+    return child.props.id as string;
+  });
+
+  if (!ids) return;
+
   return (
-    <TextAccordionProvider options={{ closeAfterMilliseconds, collapsible, type, defaultOpenItems }}>
+    <TextAccordionProvider ids={ids} options={{ closeAfterMilliseconds, collapsible, type, defaultOpenItems }}>
       <div className={cn('', className)}>{children}</div>
     </TextAccordionProvider>
   );
@@ -32,11 +42,11 @@ type TextAccordionItemProps = {
 };
 
 export function TextAccordionItem({ id, children, className = '' }: TextAccordionItemProps) {
-  const { registerItem } = useTextAccordion();
+  // const { registerItem } = useTextAccordion();
 
-  useEffect(() => {
-    registerItem(id);
-  }, [id, registerItem]);
+  // useEffect(() => {
+  //   registerItem(id);
+  // }, [id, registerItem]);
 
   return (
     <TextAccordionItemProvider id={id}>
