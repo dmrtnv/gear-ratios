@@ -77,7 +77,7 @@ function App() {
     <div className='flex w-full flex-col items-center gap-8 p-2'>
       <Header />
 
-      <div className='flex w-full flex-col items-center gap-2 md:w-fit md:flex-row md:flex-wrap md:items-stretch md:justify-center'>
+      <section className='flex w-full flex-col items-center gap-2 md:w-fit md:flex-row md:flex-wrap md:items-stretch md:justify-center'>
         <>
           {drivetrains.map((drivetrain) => (
             <DrivetrainInput key={drivetrain.id} drivetrain={drivetrain} />
@@ -90,14 +90,14 @@ function App() {
             </Button>
           </div>
         )}
-      </div>
+      </section>
 
-      <div className='hidden w-full md:block'>
+      <section className='hidden w-full md:block'>
         <Chart drivetrains={drivetrains.filter((d) => d.cassette.length && d.crankset.length)} />
-      </div>
-      <div className='block w-full md:hidden'>
+      </section>
+      <section className='block w-full md:hidden'>
         <Chart vertical drivetrains={drivetrains.filter((d) => d.cassette.length && d.crankset.length)} />
-      </div>
+      </section>
     </div>
   );
 }

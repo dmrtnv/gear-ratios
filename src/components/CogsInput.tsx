@@ -2,7 +2,6 @@ import { parseCogs } from '@/lib/parseCogs';
 import { cn } from '@/lib/utils';
 import { X } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
-import { Button } from './ui/button';
 
 type CogsInputProps = {
   globalCogs: number[];
@@ -122,9 +121,12 @@ function CogsInput({ globalCogs, setGlobalCogs, maxLength = 15, orderBy = 'asc' 
       ))}
 
       {!!numberOfFilledCogs && (
-        <Button onClick={() => setCogs(Array(maxLength).fill(''))} size={'icon'} variant={'ghost'}>
-          <X size={26} strokeWidth={1.7} />
-        </Button>
+        <button
+          onClick={() => setCogs(Array(maxLength).fill(''))}
+          className='flex h-10 w-10 items-center justify-center'
+        >
+          <X size={20} strokeWidth={1.7} />
+        </button>
       )}
     </div>
   );
@@ -159,7 +161,10 @@ function InputSlot({ index, inputRefs, cog, numberOfFilledCogs, maxLength, setCo
       ref={(element) => {
         inputRefs.current[index] = element;
       }}
-      className={cn('hidden h-10 w-10 border-2 text-center font-semibold', index <= numberOfFilledCogs && 'block')}
+      className={cn(
+        'hidden h-10 w-10 rounded-md bg-background/60 text-center font-semibold shadow-sm outline-none focus:bg-background/85',
+        index <= numberOfFilledCogs && 'block',
+      )}
       type='tel'
       pattern='^\d{0,2}$'
       inputMode='numeric'
