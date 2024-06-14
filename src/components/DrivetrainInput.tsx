@@ -8,7 +8,7 @@ import {
 } from '@/lib/describeDrivetrain';
 import { drivetrainSlice } from '@/store/features/drivetrain/drivetrainSlice';
 import { Drivetrain } from '@/types/Drivetrain';
-import { Check, Frown, Meh, Pencil, Smile, Trash2 } from 'lucide-react';
+import { Check, Frown, Meh, Pencil, Plus, Smile, Trash2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import CogsInput from './CogsInput';
 import ColorSelect from './ColorSelect';
@@ -40,7 +40,7 @@ function DrivetrainInput({ drivetrain }: { drivetrain: Drivetrain }) {
   return (
     <div
       style={{ '--bg-color': drivetrain.color.hexValue + '25' } as React.CSSProperties}
-      className='flex w-full flex-1 flex-col justify-between gap-6 rounded-2xl bg-[var(--bg-color)] p-4 shadow-lg transition-colors duration-300 md:w-fit'
+      className='flex w-full flex-1 flex-col justify-between gap-6 rounded-2xl bg-[var(--bg-color)] p-4 shadow-sm transition-colors duration-300 md:w-fit'
     >
       <div className='flex flex-1 flex-col space-y-6'>
         <DrivetrainInputHeader
@@ -78,17 +78,22 @@ function DrivetrainInput({ drivetrain }: { drivetrain: Drivetrain }) {
         </div>
       </div>
       <div className='flex flex-1 items-end justify-between gap-2'>
-        <Button size={'icon'} variant={'destructiveIcon'} onClick={() => dispatch(remove(drivetrain.id))}>
-          <Trash2 size={24} strokeWidth={1.7} />
+        <Button
+          className='bg-background/60 text-foreground shadow-sm hover:bg-background/85 active:bg-background'
+          onClick={() => dispatch(remove(drivetrain.id))}
+        >
+          <Trash2 size={18} className='mr-2' strokeWidth={1.7} />
+          Delete
         </Button>
         <Button
-          variant={'outline'}
+          className='bg-background/60 text-foreground shadow-sm hover:bg-background/85 active:bg-background'
           disabled={isSync() || !inputDrivetrain.cassette.length || !inputDrivetrain.crankset.length}
           onClick={() =>
             dispatch(update({ ...drivetrain, cassette: inputDrivetrain.cassette, crankset: inputDrivetrain.crankset }))
           }
         >
-          Submit Drivetrain
+          <Plus size={20} className='mr-2' strokeWidth={1.7} />
+          Add drivetrain
         </Button>
       </div>
       {!!drivetrain.cassette.length && !!drivetrain.crankset.length && (
@@ -203,7 +208,7 @@ function DrivetrainInputHeader({ name, setName }: { name: string; setName: (arg0
   }, []);
 
   return (
-    <div className='group relative flex w-full justify-center rounded-lg p-3 transition-all duration-300 focus-within:bg-background/50 focus-within:shadow-sm hover:bg-background/60 hover:shadow-sm'>
+    <div className='group relative flex w-full justify-center rounded-lg p-3 transition-all duration-300 focus-within:bg-background/85 focus-within:shadow-sm hover:bg-background/60 hover:shadow-sm hover:focus-within:bg-background/85'>
       {isEditModeEnabled ? (
         <form
           onSubmit={(e) => {
@@ -230,7 +235,7 @@ function DrivetrainInputHeader({ name, setName }: { name: string; setName: (arg0
               setInputValue(name);
             }}
             onChange={(e) => setInputValue(e.target.value)}
-            className='flex max-w-80 bg-transparent text-center text-3xl font-bold outline-none'
+            className='flex max-w-80 bg-transparent text-center text-3xl font-bold outline-none selection:bg-yellow-300'
           />
 
           <button
