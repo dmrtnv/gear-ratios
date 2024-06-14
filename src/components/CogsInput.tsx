@@ -160,7 +160,7 @@ function InputSlot({ index, inputRefs, cog, numberOfFilledCogs, maxLength, setCo
         inputRefs.current[index] = element;
       }}
       className={cn(
-        'hidden h-10 w-10 rounded-md bg-background/50 text-center font-semibold shadow-sm outline-none',
+        'hidden h-10 w-10 rounded-md bg-background/60 text-center font-semibold shadow-sm outline-none focus:bg-background/85',
         index <= numberOfFilledCogs && 'block',
       )}
       type='tel'
