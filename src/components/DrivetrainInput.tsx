@@ -204,6 +204,10 @@ function DrivetrainInputHeader({ name, setName }: { name: string; setName: (arg0
   const [inputId, setInputId] = useState('');
 
   useEffect(() => {
+    setInputValue(name);
+  }, [name]);
+
+  useEffect(() => {
     setInputId(crypto.randomUUID());
   }, []);
 
