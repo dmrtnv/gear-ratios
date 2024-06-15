@@ -33,6 +33,8 @@ function DrivetrainInput({ drivetrain }: { drivetrain: Drivetrain }) {
     );
   };
 
+  const isFilled = () => !!drivetrain.cassette.length && !!drivetrain.crankset.length;
+
   useEffect(() => {
     // console.log('inputDrivetrain', inputDrivetrain);
   }, [inputDrivetrain]);
@@ -82,7 +84,7 @@ function DrivetrainInput({ drivetrain }: { drivetrain: Drivetrain }) {
           className='bg-background/60 text-foreground shadow-sm hover:bg-background/85 active:bg-background'
           onClick={() => dispatch(remove(drivetrain.id))}
         >
-          <Trash2 size={18} className='mr-2' strokeWidth={1.7} />
+          <Trash2 size={18} className='mr-2' strokeWidth={1.75} />
           Delete
         </Button>
         <Button
@@ -92,8 +94,8 @@ function DrivetrainInput({ drivetrain }: { drivetrain: Drivetrain }) {
             dispatch(update({ ...drivetrain, cassette: inputDrivetrain.cassette, crankset: inputDrivetrain.crankset }))
           }
         >
-          <Plus size={20} className='mr-2' strokeWidth={1.7} />
-          Add drivetrain
+          <Plus size={20} className='mr-2' strokeWidth={1.75} />
+          {isFilled() ? 'Update' : 'Add drivetrain'}
         </Button>
       </div>
       {!!drivetrain.cassette.length && !!drivetrain.crankset.length && (

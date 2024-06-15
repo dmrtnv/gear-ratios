@@ -125,7 +125,7 @@ function CogsInput({ globalCogs, setGlobalCogs, maxLength = 15, orderBy = 'asc' 
           onClick={() => setCogs(Array(maxLength).fill(''))}
           className='flex h-10 w-10 items-center justify-center'
         >
-          <X size={20} strokeWidth={1.7} />
+          <X size={20} strokeWidth={1.75} />
         </button>
       )}
     </div>
