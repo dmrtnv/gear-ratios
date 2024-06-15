@@ -8,7 +8,7 @@ import {
 } from '@/lib/describeDrivetrain';
 import { drivetrainSlice } from '@/store/features/drivetrain/drivetrainSlice';
 import { Drivetrain } from '@/types/Drivetrain';
-import { Check, Frown, Meh, Pencil, Plus, Smile, Trash2 } from 'lucide-react';
+import { Check, Frown, Meh, Pencil, Plus, Slash, Smile, Trash2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import CogsInput from './CogsInput';
 import ColorSelect from './ColorSelect';
@@ -32,6 +32,8 @@ function DrivetrainInput({ drivetrain }: { drivetrain: Drivetrain }) {
       JSON.stringify(inputDrivetrain.cassette) === JSON.stringify(drivetrain.cassette)
     );
   };
+
+  const isFilled = () => !!drivetrain.cassette.length && !!drivetrain.crankset.length;
 
   useEffect(() => {
     // console.log('inputDrivetrain', inputDrivetrain);
@@ -82,7 +84,7 @@ function DrivetrainInput({ drivetrain }: { drivetrain: Drivetrain }) {
           className='bg-background/60 text-foreground shadow-sm hover:bg-background/85 active:bg-background'
           onClick={() => dispatch(remove(drivetrain.id))}
         >
-          <Trash2 size={18} className='mr-2' strokeWidth={1.7} />
+          <Trash2 size={18} className='mr-2' strokeWidth={1.75} />
           Delete
         </Button>
         <Button
@@ -92,8 +94,8 @@ function DrivetrainInput({ drivetrain }: { drivetrain: Drivetrain }) {
             dispatch(update({ ...drivetrain, cassette: inputDrivetrain.cassette, crankset: inputDrivetrain.crankset }))
           }
         >
-          <Plus size={20} className='mr-2' strokeWidth={1.7} />
-          Add drivetrain
+          <Plus size={20} className='mr-2' strokeWidth={1.75} />
+          {isFilled() ? 'Update' : 'Add drivetrain'}
         </Button>
       </div>
       {!!drivetrain.cassette.length && !!drivetrain.crankset.length && (
@@ -127,9 +129,13 @@ function DrivetrainDescription({ drivetrain }: { drivetrain: Drivetrain }) {
                 {maxSpeed.score === 'poor' && <Frown className='text-red-500' size={18} />}
                 {maxSpeed.score === 'mediocre' && <Meh className='text-yellow-500' size={18} />}
                 {maxSpeed.score === 'good' && <Smile className='text-green-500' size={18} />}
-                <div className='flex items-center justify-between gap-3'>
+                <div className='flex items-center justify-between gap-4'>
                   <span className='font-semibold'>{maxSpeed.speedKPH + ' kph'}</span>
-                  <span className=''>/ {`Gears ${maxSpeed.key} at ${maxSpeed.cadenceRPM} rpm`} /</span>
+                  <div className='flex items-center justify-center gap-1'>
+                    <Slash size={16} className='-rotate-12' />
+                    <span className=''>{`Gears ${maxSpeed.key} at ${maxSpeed.cadenceRPM} rpm`}</span>
+                    <Slash size={16} className='-rotate-12' />
+                  </div>
                 </div>
               </div>
             </div>
@@ -143,9 +149,13 @@ function DrivetrainDescription({ drivetrain }: { drivetrain: Drivetrain }) {
                 {minSpeed.score === 'poor' && <Frown className='text-red-500' size={18} />}
                 {minSpeed.score === 'mediocre' && <Meh className='text-yellow-500' size={18} />}
                 {minSpeed.score === 'good' && <Smile className='text-green-500' size={18} />}
-                <div className='flex items-center justify-between gap-3'>
+                <div className='flex items-center justify-between gap-4'>
                   <span className='font-semibold'>{minSpeed.speedKPH + ' kph'}</span>
-                  <span className=''>/ {`Gears ${minSpeed.key} at ${minSpeed.cadenceRPM} rpm`} /</span>
+                  <div className='flex items-center justify-center gap-1'>
+                    <Slash size={16} className='-rotate-12' />
+                    <span className=''>{`Gears ${minSpeed.key} at ${minSpeed.cadenceRPM} rpm`}</span>
+                    <Slash size={16} className='-rotate-12' />
+                  </div>
                 </div>
               </div>
             </div>
@@ -185,9 +195,13 @@ function DrivetrainDescription({ drivetrain }: { drivetrain: Drivetrain }) {
                 {maxStep.score === 'poor' && <Frown className='text-red-500' size={18} />}
                 {maxStep.score === 'mediocre' && <Meh className='text-yellow-500' size={18} />}
                 {maxStep.score === 'good' && <Smile className='text-green-500' size={18} />}
-                <div className='flex items-center justify-between gap-3'>
+                <div className='flex items-center justify-between gap-4'>
                   <span className='font-semibold'>{maxStep.step + '%'}</span>
-                  <span className=''>/ {`${maxStep.key}`} /</span>
+                  <div className='flex items-center justify-center gap-1'>
+                    <Slash size={16} className='-rotate-12' />
+                    <span className=''>{`${maxStep.key}`}</span>
+                    <Slash size={16} className='-rotate-12' />
+                  </div>
                 </div>
               </div>
             </div>

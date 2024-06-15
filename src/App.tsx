@@ -86,7 +86,7 @@ function App() {
         {drivetrains.length < 5 && (
           <div className='flex items-center justify-center'>
             <Button size={'icon-lg'} variant={'ghost'} onClick={() => dispatch(addNew())}>
-              <Plus strokeWidth={1.7} size={32} />
+              <Plus strokeWidth={1.75} size={32} />
             </Button>
           </div>
         )}
