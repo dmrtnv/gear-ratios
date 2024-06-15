@@ -1,5 +1,4 @@
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
-import { cn } from '@/lib/utils';
 import { drivetrainSlice } from '@/store/features/drivetrain/drivetrainSlice';
 import { Drivetrain } from '@/types/Drivetrain';
 import { WHEEL_SIZES, WheelSize } from '@/types/WheelSize';
@@ -18,13 +17,11 @@ function WheelSizeSelect({ drivetrain }: WheelSizeSelectProps) {
     <fieldset>
       <legend className='mb-2 text-xl font-bold'>Wheel size</legend>
 
-      <div className='flex gap-4'>
+      <div className='flex gap-1'>
         {WHEEL_SIZES.map((ws) => (
           <label
-            className={cn(
-              'cursor-pointer font-semibold',
-              ws === drivetrain.wheelSize && 'underline decoration-2 underline-offset-4',
-            )}
+            data-state={ws === drivetrain.wheelSize ? 'selected' : 'not-selected'}
+            className='cursor-pointer rounded-md py-1 pl-3 pr-2 font-semibold transition-colors ease-in-out hover:bg-background/60 active:bg-background data-[state=selected]:cursor-default data-[state=selected]:bg-background/85'
             key={ws}
           >
             <span>{ws}&Prime;</span>
