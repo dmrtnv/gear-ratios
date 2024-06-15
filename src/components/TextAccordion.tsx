@@ -27,10 +27,10 @@ export function TextAccordion({
     if (React.isValidElement(child)) {
       return child.props.id as string;
     }
-  });
+  }) as string[];
 
   return (
-    <TextAccordionProvider ids={ids ?? []} options={{ closeAfterMilliseconds, collapsible, type, defaultOpenItems }}>
+    <TextAccordionProvider ids={ids} options={{ closeAfterMilliseconds, collapsible, type, defaultOpenItems }}>
       <div className={cn('', className)}>{children}</div>
     </TextAccordionProvider>
   );
@@ -61,7 +61,7 @@ export function TextAccordionTrigger({ children, action, className = '', asChild
   const { closeAfterMilliseconds, collapsible } = useTextAccordion().options;
   const { state, setOpenState, setClosedState } = useTextAccordionItem();
 
-  const deboucedSetClosed = useCallback(
+  const debouncedSetClosed = useCallback(
     _.debounce(() => setClosedState(), closeAfterMilliseconds),
     [],
   );
@@ -76,7 +76,7 @@ export function TextAccordionTrigger({ children, action, className = '', asChild
       setOpenState();
     }
 
-    if (closeAfterMilliseconds) deboucedSetClosed();
+    if (closeAfterMilliseconds && debouncedSetClosed) debouncedSetClosed();
   };
 
   if (asChild && React.isValidElement(children)) {

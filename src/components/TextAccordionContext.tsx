@@ -32,38 +32,30 @@ type TextAccordionProviderProps = {
 const TextAccordionContext = createContext<TextAccordionContextProps | undefined>(undefined);
 
 export function TextAccordionProvider({ children, options, ids }: TextAccordionProviderProps) {
-  const [items, setItems] = useState<TextAccordionItem[]>([]);
+  const [items, setItems] = useState<TextAccordionItem[]>(
+    ids.map((id) => {
+      const setOpenState = () => {
+        setItems((prevItems) =>
+          prevItems.map((item) =>
+            id === item.id
+              ? { ...item, state: 'open' }
+              : { ...item, ...(options.type === 'single' && { state: 'closed' }) },
+          ),
+        );
+      };
 
-  useEffect(() => {
-    const registerItems = (ids: string[]) => {
-      setItems(
-        ids.map((id) => {
-          const setOpenState = () => {
-            setItems((prevItems) =>
-              prevItems.map((item) =>
-                id === item.id
-                  ? { ...item, state: 'open' }
-                  : { ...item, ...(options.type === 'single' && { state: 'closed' }) },
-              ),
-            );
-          };
+      const setClosedState = () => {
+        setItems((prevItems) => prevItems.map((item) => (id === item.id ? { ...item, state: 'closed' } : item)));
+      };
 
-          const setClosedState = () => {
-            setItems((prevItems) => prevItems.map((item) => (id === item.id ? { ...item, state: 'closed' } : item)));
-          };
-
-          return {
-            id,
-            state: options.defaultOpenItems?.includes(id) ? 'open' : 'closed',
-            setOpenState,
-            setClosedState,
-          };
-        }),
-      );
-    };
-
-    registerItems(ids);
-  }, []);
+      return {
+        id,
+        state: options.defaultOpenItems?.includes(id) ? 'open' : 'closed',
+        setOpenState,
+        setClosedState,
+      };
+    }),
+  );
 
   const getItem = (id: string) => {
     return items.find((item) => item.id === id);
@@ -87,15 +79,14 @@ export function useTextAccordion() {
 const TextAccordionItemContext = createContext<TextAccordionItem | undefined>(undefined);
 
 export function TextAccordionItemProvider({ children, id }: { children: React.ReactNode; id: string }) {
-  const [item, setItem] = useState<TextAccordionItem | undefined>(undefined);
   const { getItem } = useTextAccordion();
-  const defaultItem: TextAccordionItem = { id, state: 'closed', setClosedState: () => {}, setOpenState: () => {} };
+  const [item, setItem] = useState<TextAccordionItem | undefined>(getItem(id));
 
   useEffect(() => {
     setItem(getItem(id));
   }, [id, getItem]);
 
-  return <TextAccordionItemContext.Provider value={item ?? defaultItem}>{children}</TextAccordionItemContext.Provider>;
+  return <TextAccordionItemContext.Provider value={item}>{children}</TextAccordionItemContext.Provider>;
 }
 
 export function useTextAccordionItem() {
