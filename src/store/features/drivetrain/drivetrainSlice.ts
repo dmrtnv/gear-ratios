@@ -80,9 +80,17 @@ export const drivetrainSlice = createSlice({
       if (index !== -1) {
         drivetrains.splice(index, 1);
 
-        drivetrains.forEach((d, i) => {
-          d.name = `Drivetrain ${i + 1}`;
-        });
+        const defaultNameRegex = /^Drivetrain [1-5]$/;
+
+        for (let i = index; i < drivetrains.length; i++) {
+          if (defaultNameRegex.test(drivetrains[i].name)) {
+            drivetrains[i].name = `Drivetrain ${i + 1}`;
+          }
+        }
+
+        // drivetrains.forEach((d, i) => {
+        //   d.name = `Drivetrain ${i + 1}`;
+        // });
       }
     },
     update({ drivetrains }, action: PayloadAction<Drivetrain>) {
