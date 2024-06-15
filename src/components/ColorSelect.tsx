@@ -31,7 +31,7 @@ function ColorSelect({ color, setColor }: ColorSelectProps) {
                   } as React.CSSProperties
                 }
                 checked={clr.name === color.name}
-                className='h-6 w-6 cursor-pointer appearance-none rounded-full bg-[var(--bg-color)] outline-[3px] outline-[var(--outline-color)]  checked:cursor-default checked:outline'
+                className='h-6 w-6 cursor-pointer appearance-none rounded-[50%] bg-[var(--bg-color)]  transition-all duration-300 ease-in-out checked:scale-110 checked:cursor-default checked:rounded-md checked:shadow-sm'
                 onChange={(e) => setColor(COLORS.find((c) => c.name === e.target.value) as Color)}
                 type='radio'
                 name={'color-' + inputIdSalt}

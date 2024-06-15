@@ -1,5 +1,4 @@
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
-import { cn } from '@/lib/utils';
 import { drivetrainSlice } from '@/store/features/drivetrain/drivetrainSlice';
 import { Drivetrain } from '@/types/Drivetrain';
 import { RIDING_STYLES, RidingStyle } from '@/types/RidingStyle';
@@ -18,13 +17,11 @@ function RidingStyleSelect({ drivetrain }: RidingStyleSelectProps) {
     <fieldset>
       <legend className='mb-2 text-xl font-bold'>Riding Style</legend>
 
-      <div className='flex items-center gap-4'>
+      <div className='flex items-center gap-1'>
         {RIDING_STYLES.map((rs) => (
           <label
-            className={cn(
-              'cursor-pointer font-semibold',
-              rs === drivetrain.ridingStyle && 'underline decoration-2 underline-offset-4',
-            )}
+            data-state={rs === drivetrain.ridingStyle ? 'selected' : 'not-selected'}
+            className='cursor-pointer rounded-md px-3 py-1 font-semibold transition-colors ease-in-out hover:bg-background/60 active:bg-background data-[state=selected]:cursor-default data-[state=selected]:bg-background/85'
             key={rs}
           >
             <span>{rs}</span>
