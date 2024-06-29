@@ -16,8 +16,15 @@ import RidingStyleSelect from './RidingStyleSelect';
 import WheelSizeSelect from './WheelSizeSelect';
 import { Button } from './ui/button';
 import { Separator } from './ui/separator';
+import { cn } from '@/lib/utils';
 
-function DrivetrainInput({ drivetrain }: { drivetrain: Drivetrain }) {
+function DrivetrainInput({
+  drivetrain,
+  className = '',
+}: {
+  drivetrain: Drivetrain;
+  className?: React.HTMLProps<HTMLElement>['className'];
+}) {
   const dispatch = useAppDispatch();
   const { remove, update } = drivetrainSlice.actions;
 
@@ -41,8 +48,11 @@ function DrivetrainInput({ drivetrain }: { drivetrain: Drivetrain }) {
 
   return (
     <div
-      style={{ '--bg-color': drivetrain.color.hexValue + '25' } as React.CSSProperties}
-      className='flex w-full flex-1 flex-col justify-between gap-6 rounded-2xl bg-[var(--bg-color)] p-4 shadow-sm transition-colors duration-300 md:w-fit'
+      style={{ '--bg-color': drivetrain.color.hexValue + '35' } as React.CSSProperties}
+      className={cn(
+        'flex w-full flex-1 flex-col justify-between gap-6 rounded-2xl bg-[var(--bg-color)] p-4 shadow-sm transition-colors duration-300 md:w-fit',
+        className,
+      )}
     >
       <div className='flex flex-1 flex-col space-y-6'>
         <DrivetrainInputHeader
