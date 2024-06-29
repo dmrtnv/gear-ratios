@@ -32,7 +32,14 @@ module.exports = {
         },
         muted: {
           DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))',
+          md: 'hsl(var(--muted-md))',
+          lg: 'hsl(var(--muted-lg))',
+
+          foreground: {
+            DEFAULT: 'hsl(var(--muted-foreground))',
+            md: 'hsl(var(--muted-foreground-md))',
+            lg: 'hsl(var(--muted-foreground-lg))',
+          },
         },
         accent: {
           DEFAULT: 'hsl(var(--accent))',
@@ -45,6 +52,14 @@ module.exports = {
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
+        },
+        drivetrain: {
+          sky: 'hsl(var(--drivetrain-sky))',
+          emerald: 'hsl(var(--drivetrain-emerald))',
+          purple: 'hsl(var(--drivetrain-purple))',
+          orange: 'hsl(var(--drivetrain-orange))',
+          red: 'hsl(var(--drivetrain-red))',
+          gray: 'hsl(var(--drivetrain-gray))',
         },
       },
       borderRadius: {
