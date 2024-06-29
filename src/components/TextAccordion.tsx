@@ -4,9 +4,9 @@ import { Slash } from 'lucide-react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Options,
+  TextAccordionItemProvider,
   TextAccordionProvider,
   useTextAccordion,
-  TextAccordionItemProvider,
   useTextAccordionItem,
 } from './TextAccordionContext';
 
@@ -115,7 +115,8 @@ export function TextAccordionContent({ children }: { children: React.ReactElemen
       data-state={state}
       style={{ '--width': width + 32 + 'px' } as React.CSSProperties}
       className={cn(
-        'group flex items-center justify-center transition-[max-width] duration-300 ease-in-out data-[state=closed]:max-w-0 data-[state=open]:max-w-[var(--width)]',
+        'group flex items-center justify-center transition-[max-width] duration-300 ease-in-out data-[state=closed]:max-w-0',
+        width === 0 ? 'data-[state=open]:max-w-fit' : 'data-[state=open]:max-w-[var(--width)]',
       )}
     >
       <Slash
@@ -128,7 +129,8 @@ export function TextAccordionContent({ children }: { children: React.ReactElemen
         data-state={state}
         style={{ '--width': width + 'px' } as React.CSSProperties}
         className={cn(
-          'max-w-0 overflow-hidden text-nowrap transition-[max-width] duration-300 ease-in-out data-[state=open]:max-w-[var(--width)]',
+          'max-w-0 overflow-hidden text-nowrap transition-[max-width] duration-300 ease-in-out',
+          width === 0 ? 'data-[state=open]:max-w-fit' : 'data-[state=open]:max-w-[var(--width)]',
         )}
       >
         {React.cloneElement(children, { ref: childRef })}
