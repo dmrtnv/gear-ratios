@@ -1,4 +1,7 @@
-import React, { createContext, useContext, useState } from 'react';
+import useWindowSize from '@/hooks/useWindowSize';
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+
+const MOBILE_MAX_WIDTH = 768;
 
 type Layout = 'tabs' | 'columns';
 
@@ -9,12 +12,14 @@ type LayoutProviderProps = {
 };
 
 type LayoutProviderState = {
+  isMobile: boolean;
   layout: Layout;
   setLayout: (layout: Layout) => void;
 };
 
 const initialState: LayoutProviderState = {
-  layout: 'tabs',
+  isMobile: true,
+  layout: 'columns',
   setLayout: () => null,
 };
 
@@ -26,9 +31,24 @@ export default function LayoutProvider({
   storageKey = 'gear-ratios-layout',
   ...props
 }: LayoutProviderProps) {
-  const [layout, setLayout] = useState<Layout>(() => (localStorage.getItem(storageKey) as Layout) || defaultLayout);
+  const { width } = useWindowSize();
+
+  const isMobile = useMemo(() => width < MOBILE_MAX_WIDTH, [width]);
+
+  const [layout, setLayout] = useState<Layout>(
+    () => (isMobile && 'columns') || (localStorage.getItem(storageKey) as Layout) || defaultLayout,
+  );
+
+  useEffect(() => {
+    if (isMobile) {
+      setLayout('columns');
+    } else {
+      setLayout((localStorage.getItem(storageKey) as Layout) || defaultLayout);
+    }
+  }, [isMobile, defaultLayout, storageKey]);
 
   const value: LayoutProviderState = {
+    isMobile,
     layout,
     setLayout: (newLayout: Layout) => {
       localStorage.setItem(storageKey, newLayout);
