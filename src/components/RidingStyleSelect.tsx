@@ -20,8 +20,15 @@ function RidingStyleSelect({ drivetrain }: RidingStyleSelectProps) {
       <div className='flex items-center gap-1'>
         {RIDING_STYLES.map((rs) => (
           <label
+            style={
+              {
+                '--bg-color-hover': drivetrain.color.hexValue + '30',
+                '--bg-color-selected': drivetrain.color.hexValue + '40',
+                '--bg-color-active': drivetrain.color.hexValue + '50',
+              } as React.CSSProperties
+            }
             data-state={rs === drivetrain.ridingStyle ? 'selected' : 'not-selected'}
-            className='cursor-pointer rounded-md px-3 py-1 font-semibold transition-colors ease-in-out hover:bg-background/60 active:bg-background data-[state=selected]:cursor-default data-[state=selected]:bg-background/85'
+            className='cursor-pointer rounded-md px-3 py-1 font-semibold transition-colors ease-in-out hover:bg-[var(--bg-color-hover)] active:bg-[var(--bg-color-active)] data-[state=selected]:cursor-default data-[state=selected]:bg-[var(--bg-color-selected)] data-[state=selected]:shadow-sm'
             key={rs}
           >
             <span>{rs}</span>

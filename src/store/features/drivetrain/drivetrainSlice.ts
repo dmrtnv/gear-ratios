@@ -52,7 +52,7 @@ export const drivetrainSlice = createSlice({
         cassette: [],
       });
     },
-    addNew(state) {
+    addNew(state, action: PayloadAction<{ id: string } | undefined>) {
       const { drivetrains, options } = state;
       let ridingStyle: RidingStyle = 'road';
       let wheelSize: WheelSize = '28';
@@ -65,15 +65,17 @@ export const drivetrainSlice = createSlice({
         wheelSize = drivetrains[0].wheelSize;
       }
 
-      drivetrains.push({
-        id: uuidv4(),
+      const newDrivetrain = {
+        id: action?.payload?.id ?? uuidv4(),
         name: `Drivetrain ${drivetrains.length + 1}`,
         ridingStyle,
         wheelSize,
         color: COLORS[drivetrains.length],
         cassette: [],
         crankset: [],
-      });
+      };
+
+      drivetrains.push(newDrivetrain);
     },
     remove({ drivetrains }, action: PayloadAction<string>) {
       const index = drivetrains.findIndex((d) => d.id === action.payload);
@@ -87,10 +89,6 @@ export const drivetrainSlice = createSlice({
             drivetrains[i].name = `Drivetrain ${i + 1}`;
           }
         }
-
-        // drivetrains.forEach((d, i) => {
-        //   d.name = `Drivetrain ${i + 1}`;
-        // });
       }
     },
     update({ drivetrains }, action: PayloadAction<Drivetrain>) {

@@ -16,8 +16,15 @@ import RidingStyleSelect from './RidingStyleSelect';
 import WheelSizeSelect from './WheelSizeSelect';
 import { Button } from './ui/button';
 import { Separator } from './ui/separator';
+import { cn } from '@/lib/utils';
 
-function DrivetrainInput({ drivetrain }: { drivetrain: Drivetrain }) {
+function DrivetrainInput({
+  drivetrain,
+  className = '',
+}: {
+  drivetrain: Drivetrain;
+  className?: React.HTMLProps<HTMLElement>['className'];
+}) {
   const dispatch = useAppDispatch();
   const { remove, update } = drivetrainSlice.actions;
 
@@ -41,12 +48,15 @@ function DrivetrainInput({ drivetrain }: { drivetrain: Drivetrain }) {
 
   return (
     <div
-      style={{ '--bg-color': drivetrain.color.hexValue + '25' } as React.CSSProperties}
-      className='flex w-full flex-1 flex-col justify-between gap-6 rounded-2xl bg-[var(--bg-color)] p-4 shadow-sm transition-colors duration-300 md:w-fit'
+      style={{ '--bg-color': drivetrain.color.hexValue + '35' } as React.CSSProperties}
+      className={cn(
+        'flex w-full flex-1 flex-col justify-between gap-6 rounded-2xl bg-[var(--bg-color)] p-4 shadow-sm transition-colors duration-300 md:w-fit',
+        className,
+      )}
     >
       <div className='flex flex-1 flex-col space-y-6'>
         <DrivetrainInputHeader
-          name={drivetrain.name}
+          drivetrain={drivetrain}
           setName={(name: string) => {
             dispatch(update({ ...drivetrain, name }));
           }}
@@ -212,28 +222,36 @@ function DrivetrainDescription({ drivetrain }: { drivetrain: Drivetrain }) {
   );
 }
 
-function DrivetrainInputHeader({ name, setName }: { name: string; setName: (arg0: string) => void }) {
+function DrivetrainInputHeader({ drivetrain, setName }: { drivetrain: Drivetrain; setName: (arg0: string) => void }) {
   const [isEditModeEnabled, setIsEditModeEnabled] = useState(false);
-  const [inputValue, setInputValue] = useState(name);
+  const [inputValue, setInputValue] = useState(drivetrain.name);
   const [inputId, setInputId] = useState('');
 
   useEffect(() => {
-    setInputValue(name);
-  }, [name]);
+    setInputValue(drivetrain.name);
+  }, [drivetrain.name]);
 
   useEffect(() => {
     setInputId(crypto.randomUUID());
   }, []);
 
   return (
-    <div className='group relative flex w-full justify-center rounded-lg p-3 transition-all duration-300 focus-within:bg-background/85 focus-within:shadow-sm hover:bg-background/60 hover:shadow-sm hover:focus-within:bg-background/85'>
+    <div
+      style={
+        {
+          '--bg-color-hover': drivetrain.color.hexValue + '30',
+          '--bg-color-focus': drivetrain.color.hexValue + '40',
+        } as React.CSSProperties
+      }
+      className='group relative flex w-full justify-center rounded-lg p-3 transition-all duration-300 focus-within:bg-[var(--bg-color-focus)] focus-within:shadow-sm hover:bg-[var(--bg-color-hover)] hover:shadow-sm hover:focus-within:bg-[var(--bg-color-focus)]'
+    >
       {isEditModeEnabled ? (
         <form
           onSubmit={(e) => {
             e.preventDefault();
 
             if (inputValue) setName(inputValue);
-            if (!inputValue) setInputValue(name);
+            if (!inputValue) setInputValue(drivetrain.name);
 
             setIsEditModeEnabled(false);
           }}
@@ -250,10 +268,10 @@ function DrivetrainInputHeader({ name, setName }: { name: string; setName: (arg0
               if (e.relatedTarget?.id === 'submit-' + inputId) return;
 
               setIsEditModeEnabled(false);
-              setInputValue(name);
+              setInputValue(drivetrain.name);
             }}
             onChange={(e) => setInputValue(e.target.value)}
-            className='flex max-w-80 bg-transparent text-center text-3xl font-bold outline-none selection:bg-yellow-300'
+            className='flex max-w-80 bg-transparent text-center text-3xl font-bold outline-none'
           />
 
           <button
@@ -266,7 +284,7 @@ function DrivetrainInputHeader({ name, setName }: { name: string; setName: (arg0
         </form>
       ) : (
         <>
-          <h2 className='text-center text-3xl font-bold'>{name}</h2>
+          <h2 className='text-center text-3xl font-bold'>{drivetrain.name}</h2>
           <button
             onClick={() => setIsEditModeEnabled(true)}
             className='absolute right-3 top-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-300 group-focus-within:opacity-100 group-hover:opacity-100'

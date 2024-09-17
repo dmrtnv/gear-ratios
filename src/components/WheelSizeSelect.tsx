@@ -20,8 +20,15 @@ function WheelSizeSelect({ drivetrain }: WheelSizeSelectProps) {
       <div className='flex gap-1'>
         {WHEEL_SIZES.map((ws) => (
           <label
+            style={
+              {
+                '--bg-color-hover': drivetrain.color.hexValue + '30',
+                '--bg-color-selected': drivetrain.color.hexValue + '40',
+                '--bg-color-active': drivetrain.color.hexValue + '50',
+              } as React.CSSProperties
+            }
             data-state={ws === drivetrain.wheelSize ? 'selected' : 'not-selected'}
-            className='cursor-pointer rounded-md py-1 pl-3 pr-2 font-semibold transition-colors ease-in-out hover:bg-background/60 active:bg-background data-[state=selected]:cursor-default data-[state=selected]:bg-background/85'
+            className='cursor-pointer rounded-md py-1 pl-3 pr-2 font-semibold transition-colors ease-in-out hover:bg-[var(--bg-color-hover)] active:bg-[var(--bg-color-active)] data-[state=selected]:cursor-default data-[state=selected]:bg-[var(--bg-color-selected)] data-[state=selected]:shadow-sm'
             key={ws}
           >
             <span>{ws}&Prime;</span>

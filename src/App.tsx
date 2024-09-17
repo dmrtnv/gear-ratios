@@ -1,10 +1,10 @@
-import { Plus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Chart from './components/Chart';
-import DrivetrainInput from './components/DrivetrainInput';
+import DrivetrainSelectGroup from './components/DrivetrainSelectGroup';
 import Header from './components/Header';
-import { Button } from './components/ui/button';
+import DrivetrainStack from './components/drivetrain-stack/DrivetrainStack';
+import { useLayout } from './contexts/LayoutProvider';
 import { useAppDispatch, useAppSelector } from './hooks/redux';
 import { parseDrivetrain } from './lib/parseDrivetrain';
 import { drivetrainSlice } from './store/features/drivetrain/drivetrainSlice';
@@ -14,10 +14,12 @@ function App() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const drivetrains = useAppSelector((state) => state.drivetrain.drivetrains);
-  const { addNew, set, reset } = drivetrainSlice.actions;
+  const { set, reset } = drivetrainSlice.actions;
   const dispatch = useAppDispatch();
 
   const [initialRender, setInitiaRender] = useState(true);
+
+  const { layout } = useLayout();
 
   useEffect(() => {
     setInitiaRender(false);
@@ -74,27 +76,16 @@ function App() {
   }, [drivetrains, setSearchParams]);
 
   return (
-    <div className='flex w-full flex-col items-center gap-8 p-2'>
+    <div className='flex w-full flex-col items-center gap-8'>
       <Header />
 
-      <section className='flex w-full flex-col items-center gap-2 md:w-fit md:flex-row md:flex-wrap md:items-stretch md:justify-center'>
-        <>
-          {drivetrains.map((drivetrain) => (
-            <DrivetrainInput key={drivetrain.id} drivetrain={drivetrain} />
-          ))}
-        </>
-        {drivetrains.length < 5 && (
-          <div className='flex items-center justify-center'>
-            <Button size={'icon-lg'} variant={'ghost'} onClick={() => dispatch(addNew())}>
-              <Plus strokeWidth={1.75} size={32} />
-            </Button>
-          </div>
-        )}
-      </section>
+      {layout === 'columns' && <DrivetrainStack />}
+      {layout === 'tabs' && <DrivetrainSelectGroup />}
 
       <section className='hidden w-full md:block'>
         <Chart drivetrains={drivetrains.filter((d) => d.cassette.length && d.crankset.length)} />
       </section>
+
       <section className='block w-full md:hidden'>
         <Chart vertical drivetrains={drivetrains.filter((d) => d.cassette.length && d.crankset.length)} />
       </section>
