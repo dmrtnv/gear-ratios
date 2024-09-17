@@ -4,17 +4,28 @@ import { drivetrainSlice } from '@/store/features/drivetrain/drivetrainSlice';
 import { Drivetrain } from '@/types/Drivetrain';
 import { Plus, X } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
+import LayoutToggle from './LayoutToggle';
 
-function DrivetrainNavBar() {
+const DEFAULT_MAX_LENGTH = 5;
+
+function DrivetrainNavBar({ maxLength = DEFAULT_MAX_LENGTH }: { maxLength?: number }) {
   const drivetrains = useAppSelector((state) => state.drivetrain.drivetrains);
 
   return (
-    <ul className='flex w-full gap-2 px-2'>
+    <ul className='flex w-full items-center gap-2 px-2'>
       {drivetrains.map((drivetrain) => (
         <DrivetrainNavBarItem key={drivetrain.id} drivetrain={drivetrain} />
       ))}
 
-      {drivetrains.length < 5 && <DrivetrainNavBarAddButton />}
+      {drivetrains.length < maxLength && (
+        <li className='py-1'>
+          <DrivetrainNavBarAddButton />
+        </li>
+      )}
+
+      <li className='ml-auto py-1'>
+        <LayoutToggle iconSize={16} className='p-1.5' />
+      </li>
     </ul>
   );
 }
@@ -78,24 +89,22 @@ function DrivetrainNavBarAddButton() {
   const { setSelectedDrivetrainId } = useDrivetrainSelectGroupContext();
 
   return (
-    <li className='py-1'>
-      <div
-        onClick={() => {
-          const id = uuidv4();
+    <button
+      onClick={() => {
+        const id = uuidv4();
 
-          dispatch(addNew({ id }));
+        dispatch(addNew({ id }));
 
-          setSelectedDrivetrainId(id);
-        }}
-        className='group flex aspect-square h-full cursor-pointer items-center justify-center rounded-lg transition-colors ease-in-out hover:bg-muted active:bg-muted-md'
-      >
-        <Plus
-          size={16}
-          strokeWidth={2.4}
-          className='text-muted-foreground-lg transition-colors ease-in-out group-hover:text-muted-foreground-md group-active:text-muted-foreground'
-        />
-      </div>
-    </li>
+        setSelectedDrivetrainId(id);
+      }}
+      className='group flex cursor-pointer items-center justify-center rounded-lg p-1.5 transition-colors ease-in-out hover:bg-muted active:bg-muted-md'
+    >
+      <Plus
+        size={16}
+        strokeWidth={2.4}
+        className='text-muted-foreground-lg transition-colors ease-in-out group-hover:text-muted-foreground-md group-active:text-muted-foreground'
+      />
+    </button>
   );
 }
 
