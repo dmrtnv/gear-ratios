@@ -14,8 +14,8 @@ function DrivetrainStack({ maxLength = DEFAULT_MAX_LENGTH }: { maxLength?: numbe
   const { isMobile } = useLayout();
 
   return (
-    <section className='relative flex max-w-full flex-col items-center overflow-hidden px-2 md:block'>
-      <ScrollArea type='auto' className='pb-3 md:mx-12'>
+    <section className='relative flex w-full flex-col items-center overflow-hidden px-2 md:block md:w-auto'>
+      <ScrollArea type='auto' className='w-full pb-3 md:mx-12'>
         <div className='flex flex-col gap-1 overflow-hidden rounded-xl md:flex-row'>
           {drivetrains.map((d) => (
             <DrivetrainInput key={d.id} drivetrain={d} className='flex-initial rounded-md' />
