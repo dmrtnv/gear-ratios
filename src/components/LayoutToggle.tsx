@@ -2,12 +2,12 @@ import { useLayout } from '@/contexts/LayoutProvider';
 import { cn } from '@/lib/utils';
 import { AppWindow, Columns3 } from 'lucide-react';
 
-type ToggleLayoutProps = {
+type LayoutToggleProps = {
   className?: string;
   iconSize?: number;
 };
 
-function ToggleLayout({ className = '', iconSize = 24 }: ToggleLayoutProps) {
+function LayoutToggle({ className = '', iconSize = 24 }: LayoutToggleProps) {
   const { layout, setLayout } = useLayout();
 
   return (
@@ -37,4 +37,4 @@ function ToggleLayout({ className = '', iconSize = 24 }: ToggleLayoutProps) {
   );
 }
 
-export default ToggleLayout;
+export default LayoutToggle;
