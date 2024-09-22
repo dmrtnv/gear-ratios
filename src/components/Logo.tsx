@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { drivetrainSlice } from '@/store/features/drivetrain/drivetrainSlice';
 
-function Header() {
+function Logo() {
   const leftElementRef = useRef<HTMLDivElement>(null);
   const rightElementRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -44,7 +44,7 @@ function Header() {
       onClick={() => {
         dispatch(reset());
       }}
-      className={cn('mt-4 w-full', initialRender && 'opacity-0')}
+      className={cn('mt-4 w-full border', initialRender && 'opacity-0')}
     >
       <div
         ref={containerRef}
@@ -76,4 +76,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default Logo;
