@@ -18,7 +18,7 @@ function SettingsTrigger() {
   const { state, setState } = useSettings();
 
   const handleClick = () => {
-    if (state === 'open') setState('closed');
+    // if (state === 'open') setState('closed');
     if (state === 'closed') setState('open');
   };
 
@@ -41,7 +41,7 @@ function SettingsContent() {
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleClickOutside = (event: React.MouseEvent<HTMLElement>) => {
+    const handleClickOutside = (event: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(event.target as Node)) setState('closed');
     };
 
