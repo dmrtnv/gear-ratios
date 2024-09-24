@@ -16,6 +16,7 @@ function ThemeSwitch({ className = '', ...props }: { className?: string }) {
   return (
     <fieldset
       autoFocus
+      role='radiogroup'
       aria-label='Theme switcher'
       className={cn('flex items-center justify-center gap-4 text-muted-foreground', className)}
       {...props}
@@ -49,7 +50,7 @@ function ThemeSwitchInput({ id, checked, onChange, children, className = '' }: T
       <input id={id} checked={checked} onChange={onChange} name='theme' type='radio' className='peer sr-only' />
       <label
         className={cn(
-          'flex cursor-pointer items-center gap-1.5 rounded-md px-3 py-1 hover:bg-muted-md peer-checked:cursor-default peer-checked:bg-muted-lg peer-focus:outline',
+          'flex cursor-pointer items-center gap-1.5 rounded-md px-3 py-1 hover:bg-muted-md peer-checked:cursor-default peer-checked:bg-muted-lg peer-focus-visible:outline',
           className,
         )}
         htmlFor={id}
