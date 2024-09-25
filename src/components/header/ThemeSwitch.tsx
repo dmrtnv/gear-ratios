@@ -15,7 +15,6 @@ function ThemeSwitch({ className = '', ...props }: { className?: string }) {
 
   return (
     <fieldset
-      autoFocus
       role='radiogroup'
       aria-label='Theme switcher'
       className={cn('flex items-center justify-center gap-4 text-muted-foreground', className)}
