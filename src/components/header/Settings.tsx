@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from 'react';
 import { SettingsProvider, useSettings } from './SettingsContext';
 import ThemeSwitch from './ThemeSwitch';
 import { cn } from '@/lib/utils';
+import CadenceSlider from './CadenceSlider';
 
 function Settings() {
   return (
@@ -11,9 +12,20 @@ function Settings() {
         <SettingsTrigger />
 
         <SettingsContent>
-          <h3 className='font-bold text-muted-foreground'>Theme</h3>
+          <div className='flex flex-col items-start gap-2'>
+            <div>
+              <h3 className='font-bold text-muted-foreground'>Theme</h3>
+              <ThemeSwitch className='mt-1' />
+            </div>
 
-          <ThemeSwitch className='mt-1' />
+            <div className='w-full'>
+              <h3 className='font-bold text-muted-foreground'>Cadence</h3>
+
+              <CadenceSlider label='min' defaultValue={[60]} max={80} min={40} />
+
+              <CadenceSlider label='max' defaultValue={[100]} max={160} min={80} />
+            </div>
+          </div>
         </SettingsContent>
 
         <Overlay />
