@@ -4,8 +4,14 @@ import { SettingsProvider, useSettings } from './SettingsContext';
 import ThemeSwitch from './ThemeSwitch';
 import { cn } from '@/lib/utils';
 import CadenceSlider from './CadenceSlider';
+import { settingsSlice } from '@/store/features/settings/settingsSlice';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 
 function Settings() {
+  const { cadence } = useAppSelector((state) => state.settings);
+  const { setMaxCadence, setMinCadence } = settingsSlice.actions;
+  const dispatch = useAppDispatch();
+
   return (
     <SettingsProvider>
       <div className='relative'>
@@ -21,9 +27,21 @@ function Settings() {
             <div className='w-full'>
               <h3 className='font-bold text-muted-foreground'>Cadence</h3>
 
-              <CadenceSlider label='min' defaultValue={[60]} max={80} min={40} />
+              <CadenceSlider
+                label='min'
+                value={cadence.min}
+                setValue={(newValue) => dispatch(setMinCadence(newValue))}
+                max={80}
+                min={40}
+              />
 
-              <CadenceSlider label='max' defaultValue={[100]} max={160} min={80} />
+              <CadenceSlider
+                label='max'
+                value={cadence.max}
+                setValue={(newValue) => dispatch(setMaxCadence(newValue))}
+                max={160}
+                min={80}
+              />
             </div>
           </div>
         </SettingsContent>
