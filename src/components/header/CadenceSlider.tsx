@@ -1,4 +1,3 @@
-import { useId } from 'react';
 import { Slider } from '../ui/slider';
 
 type CadenceSliderProps = {
@@ -11,13 +10,9 @@ type CadenceSliderProps = {
 };
 
 function CadenceSlider({ value, setValue, label, max, min, step = 1 }: CadenceSliderProps) {
-  const id = useId();
-
   return (
     <div className='flex w-full items-center justify-between gap-3 font-semibold text-muted-foreground'>
-      <label htmlFor={id} className='w-16'>
-        {label}
-      </label>
+      <h4 className='w-16'>{label}</h4>
 
       <Slider
         value={value}
@@ -25,7 +20,6 @@ function CadenceSlider({ value, setValue, label, max, min, step = 1 }: CadenceSl
         max={max}
         min={min}
         step={step}
-        id={id}
         className='pt-1'
       />
 
