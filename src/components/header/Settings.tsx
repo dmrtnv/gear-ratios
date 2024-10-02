@@ -1,11 +1,12 @@
+import { useLayout } from '@/contexts/LayoutProvider';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { cn } from '@/lib/utils';
+import { settingsSlice } from '@/store/features/settings/settingsSlice';
 import { SettingsIcon } from 'lucide-react';
 import React, { useEffect, useRef } from 'react';
+import CadenceSlider from './CadenceSlider';
 import { SettingsProvider, useSettings } from './SettingsContext';
 import ThemeSwitch from './ThemeSwitch';
-import { cn } from '@/lib/utils';
-import CadenceSlider from './CadenceSlider';
-import { settingsSlice } from '@/store/features/settings/settingsSlice';
-import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 
 function Settings() {
   const { cadence } = useAppSelector((state) => state.settings);
@@ -14,7 +15,7 @@ function Settings() {
 
   return (
     <SettingsProvider>
-      <div className='relative'>
+      <div className='md:relative'>
         <SettingsTrigger />
 
         <SettingsContent>
@@ -46,7 +47,14 @@ function Settings() {
           </div>
         </SettingsContent>
 
-        <Overlay />
+        <Overlay
+          className={cn(
+            // mobile
+            'bg-muted-lg/70 backdrop-blur-sm',
+            // desktop
+            'md:bg-transparent md:backdrop-blur-none',
+          )}
+        />
       </div>
     </SettingsProvider>
   );
@@ -75,11 +83,20 @@ function SettingsTrigger() {
 
 function Overlay({ className = '' }: { className?: string }) {
   const { state } = useSettings();
+  const { isMobile } = useLayout();
+
+  useEffect(() => {
+    if (isMobile && state === 'open') {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [isMobile, state]);
 
   return (
     <div
       data-state={state}
-      className={cn('fixed bottom-0 left-0 right-0 top-0 hidden data-[state=open]:block', className)}
+      className={cn('fixed bottom-0 left-0 right-0 top-0 z-10 hidden data-[state=open]:block', className)}
     ></div>
   );
 }
@@ -117,24 +134,41 @@ function SettingsContent({ children, className = '' }: { children: React.ReactNo
       'a, button, input, textarea, select, details, [tabindex]:not([tabindex="-1"])',
     );
 
+    // console.log(focusableElements);
+
     const firstElement = modalRef.current.querySelector('input[name=theme]:checked') as HTMLElement;
     const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
 
+    // console.log({ firstElement });
+    // console.log({ lastElement });
+    // console.log({ active: document.activeElement });
+
     const handleTab = (event: KeyboardEvent) => {
       if (event.key === 'Tab') {
-        firstElement.focus();
+        if (!modalRef.current?.contains(document.activeElement)) {
+          event.preventDefault();
+          console.log('triggered');
+          console.log({ active: document.activeElement });
+          firstElement.focus();
+          console.log({ active: document.activeElement });
+          return;
+        }
+
         // 3 is temporary
         if (focusableElements.length < 3) {
           event.preventDefault();
           return;
         }
 
-        if (event.shiftKey && firstElement.contains(document.activeElement)) {
+        if (
+          event.shiftKey &&
+          (modalRef.current.querySelector('input[name=theme]:checked') as HTMLElement).contains(document.activeElement)
+        ) {
           event.preventDefault();
           lastElement.focus();
         } else if (!event.shiftKey && lastElement.contains(document.activeElement)) {
           event.preventDefault();
-          firstElement.focus();
+          (modalRef.current.querySelector('input[name=theme]:checked') as HTMLElement).focus();
         }
       }
     };
@@ -151,13 +185,20 @@ function SettingsContent({ children, className = '' }: { children: React.ReactNo
       ref={modalRef}
       data-state={state}
       className={cn(
-        'absolute -bottom-2 right-0 z-10 translate-y-full rounded-md bg-muted p-4 data-[state=open]:block data-[state=closed]:hidden',
+        // base
+        'z-20 items-center justify-center rounded-md bg-muted p-4 shadow-sm data-[state=open]:flex data-[state=closed]:hidden',
+        // mobile
+        'fixed left-10 right-10 top-1/2 h-1/2 -translate-y-1/2',
+        // desktop
+        'md:absolute md:-bottom-2 md:left-auto md:right-0 md:top-auto md:h-auto md:translate-y-full',
         className,
       )}
     >
-      <h2 className='mb-2 text-center text-lg font-bold text-muted-foreground'>Settings</h2>
+      <div className='w-fit'>
+        <h2 className='mb-2 text-center text-lg font-bold text-muted-foreground'>Settings</h2>
 
-      {children}
+        {children}
+      </div>
     </div>
   );
 }
