@@ -1,8 +1,12 @@
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { cn } from '@/lib/utils';
 import { drivetrainSlice } from '@/store/features/drivetrain/drivetrainSlice';
 import { Drivetrain } from '@/types/Drivetrain';
-import { RIDING_STYLES, RidingStyle } from '@/types/RidingStyle';
+import { RIDING_STYLES } from '@/types/RidingStyle';
 import { LinkButton } from './LinkButton';
+import { SelectGroup } from './ui/select-group/SelectGroup';
+import { SelectGroupItem } from './ui/select-group/SelectGroupItem';
+import SelectGroupLegend from './ui/select-group/SelectGroupLegend';
 
 type RidingStyleSelectProps = {
   drivetrain: Drivetrain;
@@ -14,12 +18,16 @@ function RidingStyleSelect({ drivetrain }: RidingStyleSelectProps) {
   const dispatch = useAppDispatch();
 
   return (
-    <fieldset>
-      <legend className='mb-2 text-xl font-bold'>Riding Style</legend>
+    <SelectGroup groupName='riding-style-select' areaLabel='Riding style select'>
+      <SelectGroupLegend>Riding style</SelectGroupLegend>
 
       <div className='flex items-center gap-1'>
         {RIDING_STYLES.map((rs) => (
-          <label
+          <SelectGroupItem
+            key={rs}
+            id={rs}
+            checked={rs === drivetrain.ridingStyle}
+            onChange={() => dispatch(updateRidingStyle({ ...drivetrain, ridingStyle: rs }))}
             style={
               {
                 '--bg-color-hover': drivetrain.color.hexValue + '30',
@@ -27,27 +35,22 @@ function RidingStyleSelect({ drivetrain }: RidingStyleSelectProps) {
                 '--bg-color-active': drivetrain.color.hexValue + '50',
               } as React.CSSProperties
             }
-            data-state={rs === drivetrain.ridingStyle ? 'selected' : 'not-selected'}
-            className='cursor-pointer rounded-md px-3 py-1 font-semibold transition-colors ease-in-out hover:bg-[var(--bg-color-hover)] active:bg-[var(--bg-color-active)] data-[state=selected]:cursor-default data-[state=selected]:bg-[var(--bg-color-selected)] data-[state=selected]:shadow-sm'
-            key={rs}
+            className={cn(
+              // base
+              'px-3 py-1 font-semibold',
+              // transitions
+              'transition-colors ease-in-out',
+              // colors
+              'hover:bg-[var(--bg-color-hover)] active:bg-[var(--bg-color-active)] peer-checked:bg-[var(--bg-color-selected)]',
+            )}
           >
-            <span>{rs}</span>
-            <input
-              checked={rs === drivetrain.ridingStyle}
-              className='sr-only'
-              onChange={(e) =>
-                dispatch(updateRidingStyle({ ...drivetrain, ridingStyle: e.target.value as RidingStyle }))
-              }
-              type='radio'
-              name='ridingStyle'
-              value={rs}
-            />
-          </label>
+            {rs}
+          </SelectGroupItem>
         ))}
 
         <LinkButton link={link} toggle={() => dispatch(toggleLinkRidingStyle(drivetrain.id))} />
       </div>
-    </fieldset>
+    </SelectGroup>
   );
 }
 
