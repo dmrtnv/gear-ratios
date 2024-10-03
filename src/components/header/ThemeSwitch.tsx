@@ -1,4 +1,5 @@
 import { Theme, useTheme } from '@/contexts/ThemeProvider';
+import { useWithoutTransition } from '@/hooks/useWithoutTransition';
 import { cn } from '@/lib/utils';
 import { Moon, Sun } from 'lucide-react';
 import { useCallback } from 'react';
@@ -9,11 +10,15 @@ import SelectGroupLegend from '../ui/select-group/SelectGroupLegend';
 function ThemeSwitch({ className = '', ...props }: { className?: string }) {
   const { theme, setTheme } = useTheme();
 
+  const setThemeWithoutTransition = useWithoutTransition(setTheme);
+
   const handleThemeChange = useCallback(
     (newTheme: Theme) => {
-      if (theme !== newTheme) setTheme(newTheme);
+      if (theme !== newTheme) {
+        setThemeWithoutTransition(newTheme);
+      }
     },
-    [theme, setTheme],
+    [theme, setThemeWithoutTransition],
   );
 
   return (
