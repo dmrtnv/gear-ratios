@@ -17,7 +17,7 @@ function WheelSizeSelect({ drivetrain }: WheelSizeSelectProps) {
     <fieldset>
       <legend className='mb-2 text-xl font-bold'>Wheel size</legend>
 
-      <div className='flex gap-1'>
+      <div className='flex items-center gap-1'>
         {WHEEL_SIZES.map((ws) => (
           <label
             style={
