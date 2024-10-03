@@ -29,7 +29,7 @@ export function SelectGroupItem({ checked, id, onChange, children, className = '
       <label
         style={style}
         className={cn(
-          'flex cursor-pointer items-center rounded-md px-3 py-1 hover:bg-muted-md peer-checked:cursor-default peer-checked:bg-muted-lg peer-checked:shadow-sm peer-focus-visible:outline',
+          'flex cursor-pointer select-none items-center rounded-md px-3 py-1 hover:bg-muted-md peer-checked:cursor-default peer-checked:bg-muted-lg peer-checked:shadow-sm peer-focus-visible:outline',
           className,
         )}
         htmlFor={idWithSalt}
