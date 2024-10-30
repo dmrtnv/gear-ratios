@@ -1,4 +1,4 @@
-import { useAppDispatch } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import {
   getAverageGearStepAssessment,
   getGearRangeAssessment,
@@ -120,8 +120,10 @@ function DrivetrainInput({
 }
 
 function DrivetrainDescription({ drivetrain }: { drivetrain: Drivetrain }) {
-  const maxSpeed = getMaxSpeedAssessment(drivetrain);
-  const minSpeed = getMinSpeedAssessment(drivetrain);
+  const { cadence } = useAppSelector((state) => state.settings);
+
+  const maxSpeed = getMaxSpeedAssessment(drivetrain, cadence.max[0]);
+  const minSpeed = getMinSpeedAssessment(drivetrain, cadence.min[0]);
   const gearRange = getGearRangeAssessment(drivetrain);
   const averageStep = getAverageGearStepAssessment(drivetrain);
   const maxStep = getMaxGearStepAssessment(drivetrain);
