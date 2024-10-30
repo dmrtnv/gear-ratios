@@ -1,10 +1,16 @@
 import { cn } from '@/lib/utils';
-import CrankIcon from './CrankIcon';
 import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import CrankIcon from './CrankIcon';
+import { drivetrainSlice } from '@/store/features/drivetrain/drivetrainSlice';
+import { useAppDispatch } from '@/hooks/redux';
 
 function Logo() {
   const headingRef = useRef<HTMLHeadingElement>(null);
   const [width, setWidth] = useState(0);
+
+  const { reset } = drivetrainSlice.actions;
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (headingRef.current) {
@@ -14,7 +20,7 @@ function Logo() {
   }, [headingRef]);
 
   return (
-    <a href='/' className='group flex items-center justify-center gap-2'>
+    <Link to='/' onClick={() => dispatch(reset())} className='group flex items-center justify-center gap-2'>
       <CrankIcon
         className={cn(
           // base
@@ -32,7 +38,7 @@ function Logo() {
           GEAR RATIOS
         </h1>
       </div>
-    </a>
+    </Link>
   );
 }
 
