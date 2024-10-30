@@ -1,18 +1,21 @@
 import { cn } from '@/lib/utils';
 import Settings from './Settings';
+import Logo from './Logo';
+import React from 'react';
 
-function Header() {
+function Header({ className = '' }: React.ComponentPropsWithoutRef<'header'>) {
   return (
     <header
       className={cn(
-        'sticky z-10 flex w-full items-center justify-between border bg-background p-2',
+        'sticky z-10 flex w-full items-center justify-between border-b bg-background px-4',
         // mobile
         'top-0',
         // desktop
-        'md:-top-14',
+        '',
+        className,
       )}
     >
-      <span>Logo</span>
+      <Logo />
 
       <Settings />
     </header>

@@ -2,14 +2,13 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Chart from './components/Chart';
 import DrivetrainSelectGroup from './components/DrivetrainSelectGroup';
-import Logo from './components/Logo';
 import DrivetrainStack from './components/drivetrain-stack/DrivetrainStack';
+import Header from './components/header/Header';
 import { useLayout } from './contexts/LayoutProvider';
 import { useAppDispatch, useAppSelector } from './hooks/redux';
 import { parseDrivetrain } from './lib/parseDrivetrain';
 import { drivetrainSlice } from './store/features/drivetrain/drivetrainSlice';
 import { Drivetrain } from './types/Drivetrain';
-import Header from './components/header/Header';
 
 function App() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -79,8 +78,6 @@ function App() {
   return (
     <div className='flex w-full flex-col items-center gap-8'>
       <Header />
-
-      <Logo />
 
       {layout === 'columns' && <DrivetrainStack />}
       {layout === 'tabs' && <DrivetrainSelectGroup />}
